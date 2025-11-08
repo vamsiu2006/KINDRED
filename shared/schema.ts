@@ -80,3 +80,43 @@ export const improvementRecords = pgTable('improvement_records', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
+
+export const weeklyReports = pgTable('weekly_reports', {
+  id: serial('id').primaryKey(),
+  userId: text('user_id').notNull(),
+  weekStartDate: date('week_start_date').notNull(),
+  weekEndDate: date('week_end_date').notNull(),
+  emotionalSummary: text('emotional_summary').notNull(),
+  mentalSummary: text('mental_summary').notNull(),
+  physicalSummary: text('physical_summary').notNull(),
+  medicalSummary: text('medical_summary').notNull(),
+  overallSummary: text('overall_summary').notNull(),
+  emotionalAverage: integer('emotional_average').notNull(),
+  mentalAverage: integer('mental_average').notNull(),
+  physicalAverage: integer('physical_average').notNull(),
+  medicalAverage: integer('medical_average').notNull(),
+  recommendations: text('recommendations').notNull(),
+  actionItems: text('action_items').notNull(),
+  conversationInsights: text('conversation_insights'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+export const monthlyReports = pgTable('monthly_reports', {
+  id: serial('id').primaryKey(),
+  userId: text('user_id').notNull(),
+  month: text('month').notNull(), // YYYY-MM format
+  emotionalSummary: text('emotional_summary').notNull(),
+  mentalSummary: text('mental_summary').notNull(),
+  physicalSummary: text('physical_summary').notNull(),
+  medicalSummary: text('medical_summary').notNull(),
+  overallSummary: text('overall_summary').notNull(),
+  emotionalAverage: integer('emotional_average').notNull(),
+  mentalAverage: integer('mental_average').notNull(),
+  physicalAverage: integer('physical_average').notNull(),
+  medicalAverage: integer('medical_average').notNull(),
+  weeklyReportsCount: integer('weekly_reports_count').notNull(),
+  trends: text('trends').notNull(),
+  achievements: text('achievements'),
+  areasForImprovement: text('areas_for_improvement'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
