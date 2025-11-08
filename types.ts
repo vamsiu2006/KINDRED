@@ -17,6 +17,7 @@ export interface Message {
 
 export enum View {
   Chat = 'chat',
+  Dashboard = 'dashboard',
   Medical = 'medical',
   Settings = 'settings',
 }

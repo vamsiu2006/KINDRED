@@ -85,6 +85,13 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView }) => {
           label="Kindred Chat"
         />
         <NavItem
+          view={View.Dashboard}
+          currentView={currentView}
+          setCurrentView={setCurrentView}
+          icon={ICONS.dashboard}
+          label="Dashboard"
+        />
+        <NavItem
           view={View.Medical}
           currentView={currentView}
           setCurrentView={setCurrentView}

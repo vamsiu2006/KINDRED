@@ -5,6 +5,7 @@ import Header from './Header';
 import KindredChat from '../features/KindredChat';
 import Settings from '../features/Settings';
 import MedicalManager from '../features/MedicalManager';
+import { CreativeDashboard } from '../features/CreativeDashboard';
 
 interface MainAppProps {
   user: User;
@@ -19,6 +20,8 @@ const MainApp: React.FC<MainAppProps> = ({ user, onLogout, onUpdateUser, onChang
 
   const renderView = () => {
     switch (currentView) {
+      case View.Dashboard:
+        return <CreativeDashboard />;
       case View.Medical:
         return <MedicalManager user={user} />;
       case View.Settings:
