@@ -68,25 +68,22 @@ This project is configured for Replit's autoscale deployment:
 - Added HMR client port configuration for proper hot reload
 - Set up workflow for development server
 - Configured deployment settings for production
-- Optimized conversation flow for immediate audio responses:
-  - Parallelized sentiment analysis and chat response generation to reduce latency
-  - Text responses now display immediately before audio generation
-  - Loading indicator clears as soon as text is available
-  - Voice mode automatically continues listening after AI speaks for fluent conversations
-  - Eliminated lag between text and audio by making speech generation non-blocking
-  - Audio generation starts immediately in the background while text is displayed
-  - Speech plays as soon as it's ready without blocking the UI
+- **Eliminated TTS lag completely**:
+  - Replaced Gemini TTS API (1-3 second delay) with browser's Web Speech API
+  - Audio now plays instantly when text appears - zero waiting time
+  - All responses have immediate audio: chat, image analysis, errors, quick replies
+  - Maintained voice mode flow and all existing functionality
+  - Speech quality provided by user's browser/OS native TTS engine
 - Simplified visual assistant image analysis:
   - Restructured responses into 4 clear sections: What is it?, What's it used for?, Side Effects & Risks, What to Avoid
   - Uses simple, everyday language instead of technical jargon
   - Provides practical, concise information focused on user safety and understanding
-- Implemented universal text-to-speech for all AI responses:
-  - Every Kindred response is now read aloud automatically
+- Implemented instant text-to-speech for all AI responses:
+  - Every Kindred response is now read aloud automatically with ZERO lag
+  - Uses browser's built-in Web Speech API for instant audio playback
   - Includes chat responses, quick replies, error messages, and image analysis results
-  - Speech generation starts immediately when text appears (non-blocking)
-  - Removed sentiment analysis from critical path to eliminate unnecessary delays
-  - Added performance instrumentation to track TTS generation times
-  - Note: ~1-3 second delay between text appearing and audio playing is inherent to Gemini TTS API processing time
+  - Speech starts immediately when text appears - no waiting, no API delays
+  - Replaces previous Gemini TTS API which had 1-3 second latency
 
 ## User Preferences
 - None specified yet
