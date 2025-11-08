@@ -10,7 +10,7 @@ Kindred is an AI-powered companion app that uses Google's Gemini API to provide 
 - **Build Tool**: Vite 6.2.0
 - **AI Service**: Google Gemini API (@google/genai)
 - **Database**: PostgreSQL with Drizzle ORM
-- **Storage**: localStorage for client-side medical data persistence
+- **Storage**: localStorage for client-side data persistence (chat history, medical data)
 - **Deployment**: Configured for Replit autoscale deployment
 
 ### Project Structure
@@ -21,12 +21,13 @@ Kindred is an AI-powered companion app that uses Google's Gemini API to provide 
 │   ├── main/           # Main app layout (header, sidebar, main app)
 │   └── ui/             # Reusable UI components
 ├── hooks/              # Custom React hooks (auth, speech recognition)
-├── services/           # API services (Gemini AI, audio processing, medical analysis)
+├── services/           # API services (Gemini AI, audio processing, medical analysis, chat history)
 │   ├── gemini.ts       # Gemini AI chat and image analysis
 │   ├── medical.ts      # Medical document analysis and medication scheduling
-│   └── audio.ts        # Audio processing and speech synthesis
+│   ├── audio.ts        # Audio processing and speech synthesis
+│   └── chatHistory.ts  # Chat history storage and retrieval
 ├── shared/             # Database schema (Drizzle ORM)
-│   └── schema.ts       # Medical reports, prescriptions, medications, schedules
+│   └── schema.ts       # Medical reports, prescriptions, medications, schedules, chat messages
 ├── server/             # Server utilities
 │   └── storage.ts      # Database connection (PostgreSQL)
 ├── utils/              # Helper utilities
@@ -36,6 +37,8 @@ Kindred is an AI-powered companion app that uses Google's Gemini API to provide 
 
 ### Key Features
 1. **Kindred Chat**: Conversational AI with voice interaction
+   - Automatic chat history saving
+   - Access past conversations (up to 30 days) in Settings
 2. **Visual Assistant**: Camera-based image analysis with simplified, structured responses:
    - What is it? (Identification)
    - What's it used for? (Uses and benefits)
@@ -48,7 +51,14 @@ Kindred is an AI-powered companion app that uses Google's Gemini API to provide 
    - Safety precautions and warnings display
    - Client-side data persistence via localStorage
 4. **Sign Language Mode**: Sign language translation support
-5. **Settings**: Customizable voice, language, and user preferences
+5. **Chat History**: View and browse past conversations
+   - Day-by-day organization of past 30 days
+   - Accessible through Settings
+   - User and Kindred messages clearly distinguished
+   - Timestamps and message counts for each day
+6. **Settings**: Customizable voice, language, and user preferences
+   - View chat history (past 30 days)
+   - Clear all chat history
 
 ## Development Setup
 
@@ -109,6 +119,14 @@ This project is configured for Replit's autoscale deployment:
   - Updated Vite config to properly expose GEMINI_API_KEY to browser via import.meta.env
   - Added TypeScript definitions for Vite environment variables (vite-env.d.ts)
   - Changed from process.env to import.meta.env for browser compatibility
+- **Added Chat History feature**:
+  - Created chat_messages table in PostgreSQL database (ready for backend integration)
+  - Implemented chat history service with localStorage persistence
+  - All chat messages automatically saved with timestamps
+  - Built ChatHistory component with day-by-day organization
+  - Integrated into Settings with toggle view for past 30 days
+  - Updated KindredChat to save all user and AI messages
+  - Clear chat history now clears both localStorage entries
 
 ## User Preferences
 - None specified yet
