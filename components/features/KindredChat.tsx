@@ -90,26 +90,27 @@ const KindredChat: React.FC<KindredChatProps> = ({ user, onUserOnboarded }) => {
     setIsLoading(true);
 
     try {
-      const sentiment = await analyzeSentiment(messageText);
-      const aiTextResponse = await generateChatResponse(user.name, messageText, messages, language.name);
+      const [sentiment, aiTextResponse] = await Promise.all([
+        analyzeSentiment(messageText),
+        generateChatResponse(user.name, messageText, messages, language.name)
+      ]);
+      
       addMessage(aiTextResponse, 'ai');
+      setIsLoading(false);
 
-      // Voice is now default
       const audioData = await generateSpeech(aiTextResponse, user.voiceName, sentiment);
       if (audioData) {
           setIsSpeaking(true);
           await playAudio(audioData);
           setIsSpeaking(false);
-          if (isVoiceMode) {
-              startListening(false); // Start active listening for next turn only in voice mode
-          }
-      } else if (isVoiceMode) {
-           startListening(false); // Still listen even if TTS fails in voice mode
+      }
+
+      if (isVoiceMode) {
+          startListening(false);
       }
     } catch (error) {
       console.error("Failed to get response from AI", error);
       addMessage("I'm sorry, I'm having trouble connecting right now. Please try again.", 'ai');
-    } finally {
       setIsLoading(false);
     }
   }, [isVoiceMode, isLoading, pendingImage, user, messages, language.name, addMessage]);
@@ -272,8 +273,9 @@ const KindredChat: React.FC<KindredChatProps> = ({ user, onUserOnboarded }) => {
 
       <div className="mt-4 text-center text-teal-300 text-sm h-6">
         {isPassiveListening && "Say 'Hey Kindred' to start a voice conversation."}
-        {isVoiceMode && !isListening && !isSpeaking && "Voice Mode Activated."}
+        {isVoiceMode && !isListening && !isSpeaking && "Voice Mode Active - Speak to continue..."}
         {isListening && !isPassiveListening && "Listening..."}
+        {isSpeaking && "Speaking..."}
       </div>
 
       <div className="mt-2 flex items-center gap-2">
