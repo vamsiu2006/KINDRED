@@ -83,8 +83,10 @@ This project is configured for Replit's autoscale deployment:
 - Implemented universal text-to-speech for all AI responses:
   - Every Kindred response is now read aloud automatically
   - Includes chat responses, quick replies, error messages, and image analysis results
-  - Speech starts immediately after text appears with zero lag
-  - Removed sentiment analysis from critical path for instant audio playback
+  - Speech generation starts immediately when text appears (non-blocking)
+  - Removed sentiment analysis from critical path to eliminate unnecessary delays
+  - Added performance instrumentation to track TTS generation times
+  - Note: ~1-3 second delay between text appearing and audio playing is inherent to Gemini TTS API processing time
 
 ## User Preferences
 - None specified yet
