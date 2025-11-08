@@ -180,6 +180,12 @@ This project is configured for Replit's autoscale deployment:
   - Integrated into Creative Dashboard with generate report buttons and collapsible views
   - localStorage persistence for all reports
   - Fixed Gemini API response handling using result.response.text() for reliable AI analysis
+- **Improved Welcome & Introduction Experience**:
+  - Replaced multi-message onboarding flow with single comprehensive introduction
+  - New introduction explains Kindred's purpose, all major features, and what help it provides
+  - Added text-to-speech support for both new user introduction and returning user greeting
+  - Removed duplicate greeting messages for cleaner chat experience
+  - Introduction ends by asking about user's well-being to start conversation naturally
 
 ## User Preferences
 - None specified yet
