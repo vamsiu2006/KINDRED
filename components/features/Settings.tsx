@@ -129,14 +129,14 @@ const Settings: React.FC<SettingsProps> = ({ user, onUpdateUser, onChangePasswor
     }
   };
   
-  const inputClasses = "appearance-none rounded-lg relative block w-full px-4 py-3 border border-teal-500/20 bg-black/20 placeholder-gray-500 text-white focus:outline-none focus:ring-0 transition-all duration-300";
+  const inputClasses = "appearance-none rounded-lg relative block w-full px-4 py-3 border border-emerald-500/20 bg-black/20 placeholder-gray-500 text-white focus:outline-none focus:ring-0 transition-all duration-300";
   const buttonClasses = "w-full flex justify-center items-center gap-2 py-3 px-4 rounded-lg text-white font-semibold disabled:bg-gray-500 disabled:cursor-not-allowed transition-all duration-300 shadow-lg hover:shadow-xl";
 
 
   return (
     <div className="max-w-2xl mx-auto space-y-12">
       {/* Profile Settings */}
-      <div className="p-4 sm:p-6 lg:p-8 bg-black/20 backdrop-blur-lg rounded-2xl shadow-2xl shadow-black/40 border border-teal-500/20">
+      <div className="p-4 sm:p-6 lg:p-8 bg-black/20 backdrop-blur-lg rounded-2xl shadow-2xl shadow-black/40 border border-emerald-500/20">
         <h2 className="text-3xl font-bold text-center mb-2 text-transparent bg-clip-text bg-gradient-to-r from-teal-300 via-purple-400 to-fuchsia-400">
           Profile Settings
         </h2>

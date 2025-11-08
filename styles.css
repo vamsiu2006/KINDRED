@@ -1,0 +1,293 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Greenish-Red Theme Colors */
+  --primary-green: #00ff88;
+  --primary-teal: #00d9ff;
+  --accent-red: #ff3366;
+  --accent-pink: #ff6b9d;
+  
+  /* Dark Background Gradient */
+  --bg-dark: #0a0e1a;
+  --bg-darker: #050810;
+  --bg-card: rgba(15, 25, 35, 0.8);
+  
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #00ff88 0%, #00d9ff 50%, #ff3366 100%);
+  --gradient-glow: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 217, 255, 0.2), rgba(255, 51, 102, 0.2));
+  --gradient-card: linear-gradient(145deg, rgba(15, 25, 35, 0.95), rgba(10, 20, 30, 0.95));
+  
+  /* Glass Effect */
+  --glass-bg: rgba(15, 25, 35, 0.6);
+  --glass-border: rgba(0, 255, 136, 0.2);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg-darker);
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(0, 255, 136, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(255, 51, 102, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 50% 20%, rgba(0, 217, 255, 0.03) 0%, transparent 50%);
+  background-attachment: fixed;
+  color: #e0e6ed;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+  overflow-x: hidden;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-darker);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, var(--primary-green), var(--primary-teal));
+  border-radius: 10px;
+  border: 2px solid var(--bg-darker);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, var(--primary-teal), var(--accent-red));
+}
+
+/* Glowing Card Effect */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary-green);
+  box-shadow: 
+    0 12px 48px rgba(0, 255, 136, 0.15),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+/* Gradient Text */
+.gradient-text {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Pulse Animation */
+.pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(0, 255, 136, 0.6);
+  }
+}
+
+/* Circuit Animation */
+@keyframes circuitPulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 5px rgba(0, 255, 136, 0.5));
+  }
+  50% {
+    filter: drop-shadow(0 0 15px rgba(0, 217, 255, 0.8));
+  }
+}
+
+.circuit-logo {
+  animation: circuitPulse 3s ease-in-out infinite;
+}
+
+/* Button Styles */
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-green), var(--primary-teal));
+  color: var(--bg-darker);
+  font-weight: 600;
+  padding: 12px 28px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 255, 136, 0.5);
+}
+
+.btn-secondary {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  color: var(--primary-green);
+  border: 1px solid var(--primary-green);
+  padding: 12px 28px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: rgba(0, 255, 136, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 255, 136, 0.2);
+}
+
+/* Input Styles */
+.input-glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 14px 18px;
+  color: #e0e6ed;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.input-glass:focus {
+  border-color: var(--primary-green);
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+}
+
+.input-glass::placeholder {
+  color: rgba(224, 230, 237, 0.4);
+}
+
+/* Message Bubble Styles */
+.message-user {
+  background: linear-gradient(135deg, rgba(0, 255, 136, 0.15), rgba(0, 217, 255, 0.15));
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  border-radius: 18px 18px 4px 18px;
+  padding: 14px 18px;
+  max-width: 80%;
+  margin-left: auto;
+  box-shadow: 0 4px 12px rgba(0, 255, 136, 0.1);
+}
+
+.message-ai {
+  background: var(--gradient-card);
+  border: 1px solid rgba(0, 217, 255, 0.2);
+  border-radius: 18px 18px 18px 4px;
+  padding: 14px 18px;
+  max-width: 80%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Floating Animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.floating {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Shimmer Effect */
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 255, 136, 0.2),
+    transparent
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Card Hover Glow */
+.card-glow {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-glow::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle,
+    rgba(0, 255, 136, 0.1) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.card-glow:hover::before {
+  opacity: 1;
+}
+
+/* Loading Spinner */
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(0, 255, 136, 0.1);
+  border-top-color: var(--primary-green);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Sidebar Icons Glow */
+.icon-glow {
+  filter: drop-shadow(0 0 8px rgba(0, 255, 136, 0.4));
+  transition: all 0.3s ease;
+}
+
+.icon-glow:hover {
+  filter: drop-shadow(0 0 12px rgba(0, 255, 136, 0.8));
+  transform: scale(1.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .glass-card {
+    border-radius: 16px;
+  }
+  
+  .message-user,
+  .message-ai {
+    max-width: 90%;
+  }
+}

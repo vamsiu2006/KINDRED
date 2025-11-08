@@ -117,8 +117,8 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin, onSignup, onSignInWith
 
 
   const renderForm = () => {
-    const inputClasses = "appearance-none rounded-lg relative block w-full px-4 py-3 border border-teal-500/20 bg-black/20 placeholder-gray-500 text-white focus:outline-none focus:ring-0 focus:border-teal-400 focus:shadow-[0_0_15px_rgba(45,212,191,0.4)] transition-all duration-300";
-    const buttonClasses = "group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-teal-500 to-purple-600 hover:from-teal-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 focus:ring-offset-gray-900 disabled:from-gray-500 disabled:to-gray-600 disabled:cursor-not-allowed transition-all duration-300 shadow-lg hover:shadow-xl shadow-teal-900/40";
+    const inputClasses = "input-glass appearance-none rounded-lg relative block w-full px-4 py-3";
+    const buttonClasses = "btn-primary group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg disabled:cursor-not-allowed";
 
     switch (mode) {
       case 'verify':
@@ -202,9 +202,23 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin, onSignup, onSignInWith
   return (
     <>
     <div className="flex items-center justify-center min-h-screen p-4">
-      <div className="w-full max-w-md p-8 space-y-8 bg-black/20 backdrop-blur-lg rounded-2xl shadow-2xl shadow-black/40 border border-teal-500/20">
+      <div className="w-full max-w-md p-8 space-y-8 glass-card border-emerald-500/30 rounded-2xl shadow-2xl">
         <div className="text-center">
-          <h1 className="text-4xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-teal-300 via-purple-400 to-fuchsia-400">
+          <div className="flex justify-center mb-4">
+            <div className="circuit-logo">
+              <img 
+                src="/kindred-logo.jpg" 
+                alt="Kindred AI" 
+                className="h-20 w-20 rounded-xl object-cover"
+              />
+            </div>
+          </div>
+          <h1 className="text-4xl font-bold tracking-tight gradient-text" style={{
+            background: 'linear-gradient(135deg, #00ff88 0%, #00d9ff 50%, #ff3366 100%)',
+            WebkitBackgroundClip: 'text',
+            backgroundClip: 'text',
+            WebkitTextFillColor: 'transparent'
+          }}>
             {mode === 'login' && 'Welcome to KINDRED'}
             {mode === 'signup' && 'Create Your Profile'}
             {mode === 'verify' && 'Verify Your Email'}

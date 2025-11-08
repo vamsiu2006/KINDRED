@@ -17,20 +17,14 @@ interface KindredChatProps {
 }
 
 const KindredLogoAvatar = () => (
-    <div className="w-10 h-10 rounded-full bg-black/20 flex-shrink-0 flex items-center justify-center border border-teal-500/20">
-         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" className="h-7 w-7">
-            <defs>
-                <linearGradient id="logo-aurora-avatar" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#8b5cf6" />
-                    <stop offset="100%" stopColor="#ec4899" />
-                </linearGradient>
-            </defs>
-            <path 
-                fill="url(#logo-aurora-avatar)" 
-                d="M50,15 C25,20 20,40 30,60 C35,70 40,85 50,85 C60,85 65,70 70,60 C80,40 75,20 50,15 z" 
-                transform="rotate(15 50 50)"
-            />
-        </svg>
+    <div className="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center border-2 border-emerald-500/30 circuit-logo overflow-hidden" style={{
+      background: 'linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 217, 255, 0.1))'
+    }}>
+      <img 
+        src="/kindred-logo.jpg" 
+        alt="Kindred AI" 
+        className="h-full w-full object-cover"
+      />
     </div>
 );
 
@@ -302,20 +296,20 @@ How are you feeling today?`;
         {messages.map((msg) => (
           <div key={msg.id} className={`flex items-end gap-3 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
             {msg.sender === 'ai' && <KindredLogoAvatar />}
-            <div className={`max-w-xs md:max-w-md lg:max-w-lg px-4 py-3 rounded-2xl shadow-md ${msg.sender === 'user' ? 'bg-gradient-to-br from-teal-500 to-green-500 rounded-br-lg' : 'bg-gradient-to-br from-purple-600 to-fuchsia-500 rounded-bl-lg'}`}>
-              {msg.image && <img src={msg.image} alt="User upload" className="rounded-lg mb-2 max-w-full h-auto" />}
-              <p className="text-white text-sm whitespace-pre-wrap">{msg.text}</p>
+            <div className={`message-${msg.sender === 'user' ? 'user' : 'ai'} max-w-xs md:max-w-md lg:max-w-lg transition-all duration-300 hover:scale-[1.02]`}>
+              {msg.image && <img src={msg.image} alt="User upload" className="rounded-lg mb-2 max-w-full h-auto border border-emerald-500/20" />}
+              <p className="text-white text-sm whitespace-pre-wrap leading-relaxed">{msg.text}</p>
             </div>
           </div>
         ))}
         {isLoading && (
             <div className="flex items-end gap-3 justify-start">
                 <KindredLogoAvatar />
-                <div className="max-w-lg px-4 py-3 rounded-2xl bg-gray-700/50 rounded-bl-lg">
+                <div className="max-w-lg px-4 py-3 rounded-2xl glass-card border-emerald-500/20 rounded-bl-lg">
                     <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 rounded-full animate-bounce [animation-delay:-0.3s]" style={{background: 'linear-gradient(135deg, #00ff88, #00d9ff)'}}></div>
+                        <div className="w-2 h-2 rounded-full animate-bounce [animation-delay:-0.15s]" style={{background: 'linear-gradient(135deg, #00d9ff, #ff3366)'}}></div>
+                        <div className="w-2 h-2 rounded-full animate-bounce" style={{background: 'linear-gradient(135deg, #00ff88, #ff3366)'}}></div>
                     </div>
                 </div>
             </div>
@@ -323,7 +317,12 @@ How are you feeling today?`;
         <div ref={chatEndRef} />
       </div>
 
-      <div className="mt-4 text-center text-teal-300 text-sm h-6">
+      <div className="mt-4 text-center gradient-text text-sm h-6 font-medium" style={{
+        background: 'linear-gradient(135deg, #00ff88 0%, #00d9ff 50%, #ff3366 100%)',
+        WebkitBackgroundClip: 'text',
+        backgroundClip: 'text',
+        WebkitTextFillColor: 'transparent'
+      }}>
         {isPassiveListening && "Say 'Hey Kindred' to start a voice conversation."}
         {isVoiceMode && !isListening && !isSpeaking && "Voice Mode Active - Speak to continue..."}
         {isListening && !isPassiveListening && "Listening..."}
@@ -355,20 +354,25 @@ How are you feeling today?`;
             }}
             onKeyDown={(e) => e.key === 'Enter' && handleSendMessage(input)}
             placeholder={isListening ? "Listening..." : "Type or say something..."}
-            className="w-full pl-4 pr-12 py-3 rounded-full bg-black/30 border border-teal-500/20 text-white placeholder-gray-400 focus:outline-none focus:ring-0 focus:border-teal-400 focus:shadow-[0_0_15px_rgba(45,212,191,0.4)] transition-all duration-300"
+            className="input-glass w-full pl-4 pr-12 py-3 rounded-full"
             />
              <button
                 onClick={() => handleSendMessage(input)}
                 disabled={isLoading || (!input.trim() && !pendingImage)}
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full text-white bg-gradient-to-r from-teal-500 to-purple-500 hover:from-teal-600 hover:to-purple-600 disabled:from-gray-500 disabled:to-gray-600 disabled:cursor-not-allowed transition-all"
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full text-white hover:scale-110 disabled:cursor-not-allowed transition-all duration-300 disabled:opacity-50"
+                style={{
+                  background: isLoading || (!input.trim() && !pendingImage) 
+                    ? 'linear-gradient(135deg, #4a5568, #718096)' 
+                    : 'linear-gradient(135deg, #00ff88, #00d9ff)'
+                }}
              >
                 {isLoading ? <LoadingSpinner size="w-5 h-5" /> : ICONS.send('w-5 h-5')}
             </button>
         </div>
-        <button onClick={() => setIsSignModeOpen(true)} className="p-3 rounded-full bg-black/30 border border-teal-500/20 text-gray-300 hover:text-white hover:bg-white/10 transition-colors">
+        <button onClick={() => setIsSignModeOpen(true)} className="p-3 rounded-full glass-card border-emerald-500/20 text-emerald-400 hover:text-white hover:border-emerald-500/40 hover:scale-110 transition-all duration-300">
             {ICONS.sign('w-6 h-6')}
         </button>
-        <button onClick={() => setIsCameraOpen(true)} className="p-3 rounded-full bg-black/30 border border-teal-500/20 text-gray-300 hover:text-white hover:bg-white/10 transition-colors">
+        <button onClick={() => setIsCameraOpen(true)} className="p-3 rounded-full glass-card border-emerald-500/20 text-emerald-400 hover:text-white hover:border-emerald-500/40 hover:scale-110 transition-all duration-300">
             {ICONS.camera('w-6 h-6')}
         </button>
         {hasRecognitionSupport && (
