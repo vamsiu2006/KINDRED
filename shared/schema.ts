@@ -64,3 +64,19 @@ export const chatMessages = pgTable('chat_messages', {
   message: text('message').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
+
+export const improvementRecords = pgTable('improvement_records', {
+  id: serial('id').primaryKey(),
+  userId: text('user_id').notNull(),
+  recordDate: date('record_date').notNull(),
+  emotionalScore: integer('emotional_score').notNull(), // 1-10 scale
+  mentalScore: integer('mental_score').notNull(), // 1-10 scale
+  physicalScore: integer('physical_score').notNull(), // 1-10 scale
+  medicalScore: integer('medical_score').notNull(), // 1-10 scale
+  emotionalNotes: text('emotional_notes'),
+  mentalNotes: text('mental_notes'),
+  physicalNotes: text('physical_notes'),
+  medicalNotes: text('medical_notes'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
