@@ -98,16 +98,24 @@ const KindredChat: React.FC<KindredChatProps> = ({ user, onUserOnboarded }) => {
       addMessage(aiTextResponse, 'ai');
       setIsLoading(false);
 
-      const audioData = await generateSpeech(aiTextResponse, user.voiceName, sentiment);
-      if (audioData) {
+      generateSpeech(aiTextResponse, user.voiceName, sentiment).then(async (audioData) => {
+        if (audioData) {
           setIsSpeaking(true);
           await playAudio(audioData);
           setIsSpeaking(false);
-      }
-
-      if (isVoiceMode) {
+          
+          if (isVoiceMode) {
+            startListening(false);
+          }
+        } else if (isVoiceMode) {
           startListening(false);
-      }
+        }
+      }).catch((error) => {
+        console.error("Failed to generate or play speech:", error);
+        if (isVoiceMode) {
+          startListening(false);
+        }
+      });
     } catch (error) {
       console.error("Failed to get response from AI", error);
       addMessage("I'm sorry, I'm having trouble connecting right now. Please try again.", 'ai');
