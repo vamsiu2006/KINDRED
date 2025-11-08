@@ -11,35 +11,108 @@ export const getBestVoice = (preference: string): SpeechSynthesisVoice | null =>
   const voices = getAvailableVoices();
   if (voices.length === 0) return null;
 
-  // Voice preference mapping
-  const voicePatterns: { [key: string]: string[] } = {
-    'female-us': ['Samantha', 'Victoria', 'Karen', 'Moira', 'Tessa', 'female', 'woman', 'en-US', 'en_US'],
-    'female-uk': ['Kate', 'Serena', 'female', 'woman', 'en-GB', 'en_GB'],
-    'female-natural': ['Google US English', 'Microsoft Zira', 'female', 'natural'],
-    'male-us': ['Alex', 'Tom', 'male', 'man', 'en-US', 'en_US'],
-    'male-uk': ['Daniel', 'Oliver', 'male', 'man', 'en-GB', 'en_GB'],
-    'auto': ['Google', 'Microsoft', 'Samantha', 'Karen', 'natural']
+  // Common female voice indicators across platforms
+  const femaleIndicators = [
+    'samantha', 'victoria', 'karen', 'moira', 'tessa', 'susan', 'fiona', 
+    'zira', 'jenny', 'aria', 'salli', 'kimberly', 'joanna', 'kendra', 'ivy',
+    'kate', 'serena', 'hazel', 'catherine', 'amelie',
+    'google uk english female', 'microsoft zira', 'microsoft jenny',
+    'female', 'woman', 'girl'
+  ];
+
+  const maleIndicators = [
+    'alex', 'tom', 'daniel', 'oliver', 'fred', 'ralph', 'david', 'mark',
+    'google us english', 'google uk english male', 'google australian',
+    'male', 'man'
+  ];
+
+  // Check if a voice name suggests it's female
+  const isFemaleVoice = (voice: SpeechSynthesisVoice): boolean => {
+    const nameLower = voice.name.toLowerCase();
+    return femaleIndicators.some(indicator => nameLower.includes(indicator)) &&
+           !maleIndicators.some(indicator => nameLower.includes(indicator));
   };
 
-  const patterns = voicePatterns[preference] || voicePatterns['auto'];
-  
-  // Try to find voice matching patterns
-  for (const pattern of patterns) {
-    const voice = voices.find(v => 
-      v.name.toLowerCase().includes(pattern.toLowerCase()) ||
-      v.lang.toLowerCase().includes(pattern.toLowerCase())
-    );
-    if (voice) return voice;
+  // Check if a voice name suggests it's male
+  const isMaleVoice = (voice: SpeechSynthesisVoice): boolean => {
+    const nameLower = voice.name.toLowerCase();
+    return maleIndicators.some(indicator => nameLower.includes(indicator));
+  };
+
+  // Voice preference matching
+  if (preference === 'female-us') {
+    // Prefer US English female voices
+    const usVoices = voices.filter(v => v.lang.startsWith('en-US') || v.lang.startsWith('en_US'));
+    const femaleUS = usVoices.find(v => isFemaleVoice(v));
+    if (femaleUS) return femaleUS;
+    
+    // Fallback to any English female voice
+    const anyFemale = voices.find(v => v.lang.startsWith('en') && isFemaleVoice(v));
+    if (anyFemale) return anyFemale;
   }
 
-  // Fallback: prefer English female voices
-  const englishFemale = voices.find(v => 
-    v.lang.startsWith('en') && 
-    (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('woman'))
-  );
-  if (englishFemale) return englishFemale;
+  if (preference === 'female-uk') {
+    // Prefer UK English female voices
+    const ukVoices = voices.filter(v => v.lang.startsWith('en-GB') || v.lang.startsWith('en_GB'));
+    const femaleUK = ukVoices.find(v => isFemaleVoice(v));
+    if (femaleUK) return femaleUK;
+    
+    // Fallback to any English female voice
+    const anyFemale = voices.find(v => v.lang.startsWith('en') && isFemaleVoice(v));
+    if (anyFemale) return anyFemale;
+  }
 
-  // Final fallback: any English voice
+  if (preference === 'female-natural') {
+    // Prefer Google or Microsoft female voices
+    const naturalFemale = voices.find(v => 
+      (v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('microsoft')) && 
+      isFemaleVoice(v)
+    );
+    if (naturalFemale) return naturalFemale;
+    
+    // Fallback to any English female voice
+    const anyFemale = voices.find(v => v.lang.startsWith('en') && isFemaleVoice(v));
+    if (anyFemale) return anyFemale;
+  }
+
+  if (preference === 'male-us') {
+    // Prefer US English male voices
+    const usVoices = voices.filter(v => v.lang.startsWith('en-US') || v.lang.startsWith('en_US'));
+    const maleUS = usVoices.find(v => isMaleVoice(v));
+    if (maleUS) return maleUS;
+    
+    // Fallback to any English male voice
+    const anyMale = voices.find(v => v.lang.startsWith('en') && isMaleVoice(v));
+    if (anyMale) return anyMale;
+  }
+
+  if (preference === 'male-uk') {
+    // Prefer UK English male voices
+    const ukVoices = voices.filter(v => v.lang.startsWith('en-GB') || v.lang.startsWith('en_GB'));
+    const maleUK = ukVoices.find(v => isMaleVoice(v));
+    if (maleUK) return maleUK;
+    
+    // Fallback to any English male voice
+    const anyMale = voices.find(v => v.lang.startsWith('en') && isMaleVoice(v));
+    if (anyMale) return anyMale;
+  }
+
+  // Auto mode: prefer female voices with good names
+  const qualityFemale = voices.find(v => 
+    v.lang.startsWith('en') && 
+    (v.name.toLowerCase().includes('google') || 
+     v.name.toLowerCase().includes('samantha') ||
+     v.name.toLowerCase().includes('zira') ||
+     v.name.toLowerCase().includes('jenny')) &&
+    isFemaleVoice(v)
+  );
+  if (qualityFemale) return qualityFemale;
+
+  // Fallback: any English female voice
+  const anyEnglishFemale = voices.find(v => v.lang.startsWith('en') && isFemaleVoice(v));
+  if (anyEnglishFemale) return anyEnglishFemale;
+
+  // Last resort: first English voice available
   return voices.find(v => v.lang.startsWith('en')) || voices[0];
 };
 
