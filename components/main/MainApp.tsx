@@ -6,6 +6,7 @@ import KindredChat from '../features/KindredChat';
 import Settings from '../features/Settings';
 import MedicalManager from '../features/MedicalManager';
 import { CreativeDashboard } from '../features/CreativeDashboard';
+import Emergency from '../features/Emergency';
 
 interface MainAppProps {
   user: User;
@@ -24,6 +25,8 @@ const MainApp: React.FC<MainAppProps> = ({ user, onLogout, onUpdateUser, onChang
         return <CreativeDashboard />;
       case View.Medical:
         return <MedicalManager user={user} />;
+      case View.Emergency:
+        return <Emergency user={user} />;
       case View.Settings:
         return <Settings user={user} onUpdateUser={onUpdateUser} onChangePassword={onChangePassword} onLogout={onLogout} />;
       case View.Chat:

@@ -84,6 +84,13 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView }) => {
           icon={ICONS.medical}
           label="Medical Manager"
         />
+        <NavItem
+          view={View.Emergency}
+          currentView={currentView}
+          setCurrentView={setCurrentView}
+          icon={ICONS.emergency}
+          label="Emergency"
+        />
       </div>
        <div>
         <NavItem

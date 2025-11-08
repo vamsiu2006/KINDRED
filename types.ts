@@ -19,6 +19,7 @@ export enum View {
   Chat = 'chat',
   Dashboard = 'dashboard',
   Medical = 'medical',
+  Emergency = 'emergency',
   Settings = 'settings',
 }
 
