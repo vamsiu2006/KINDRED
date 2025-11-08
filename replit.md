@@ -1,7 +1,7 @@
 # Kindred AI Companion
 
 ## Overview
-Kindred is an AI-powered companion application leveraging Google's Gemini API to offer empathetic conversations, visual assistance, and sign language translation. Its core purpose is to provide psychological support through voice interaction, camera-based image analysis, and multi-language capabilities. The project aims to create a warm, encouraging, and psychologically supportive interface for users with mental health challenges, physical disabilities, and general wellness needs.
+Kindred is an AI-powered companion application leveraging Google's Gemini API to offer empathetic conversations and visual assistance. Its core purpose is to provide psychological support through voice interaction, camera-based image analysis, and multi-language capabilities. The project aims to create a warm, encouraging, and psychologically supportive interface for users with mental health challenges, physical disabilities, and general wellness needs.
 
 ## User Preferences
 - None specified yet
@@ -26,8 +26,7 @@ The application features a "Therapeutic & Accessible UI" with a greenish-red col
     *   **AI Weekly & Monthly Insights**: Generates AI-powered reports analyzing improvement data and chat conversations, offering summaries, personalized recommendations, and trend analysis.
 3.  **Visual Assistant**: Camera-based image analysis providing simplified, structured responses for identification, uses, side effects/risks, and precautions.
 4.  **Medical Manager**: AI-powered analysis of medical documents (prescriptions, reports) to extract medication schedules. It features a 14-day medication calendar with check-off functionality and safety precaution displays.
-5.  **Sign Language Mode**: Provides support for sign language translation.
-6.  **Settings**: Allows customization of voice, language, and user preferences, including viewing and clearing chat history.
+5.  **Settings**: Allows customization of voice, language, and user preferences, including viewing and clearing chat history.
 
 ### System Design Choices
 -   Client-side data persistence for chat history, medical data, improvement records, and reports using `localStorage`.

@@ -9,7 +9,6 @@ import { SUPPORTED_LANGUAGES, ICONS } from '../../constants';
 import LoadingSpinner from '../ui/LoadingSpinner';
 import MicButton from '../ui/MicButton';
 import CameraCapture from './CameraCapture';
-import SignLanguageMode from './SignLanguageMode';
 
 interface KindredChatProps {
   user: User;
@@ -38,7 +37,6 @@ const KindredChat: React.FC<KindredChatProps> = ({ user, onUserOnboarded }) => {
   
   const [pendingImage, setPendingImage] = useState<File | null>(null);
   const [isCameraOpen, setIsCameraOpen] = useState(false);
-  const [isSignModeOpen, setIsSignModeOpen] = useState(false);
   
   const language: Language = SUPPORTED_LANGUAGES.find(l => l.code === user.languageCode) || SUPPORTED_LANGUAGES[0];
   const chatHistoryKey = `kindred_chat_history_${user.name}`;
@@ -88,20 +86,12 @@ const KindredChat: React.FC<KindredChatProps> = ({ user, onUserOnboarded }) => {
 
     const text = messageText.toLowerCase();
     const visualKeywords = ['see', 'watch', 'seeing', 'visual', 'look at', 'picture', 'image', 'describe this'];
-    const signKeywords = ['sign language', 'signing', 'sign'];
 
     addMessage(messageText, 'user');
     setInput('');
 
     if (visualKeywords.some(kw => text.includes(kw))) {
         const response = "Of course. Please use the camera button to show me what you'd like me to see.";
-        addMessage(response, 'ai');
-        speakText(response, 'cheerful');
-        return;
-    }
-
-    if (signKeywords.some(kw => text.includes(kw))) {
-        const response = "I'm developing a feature for that! You can try a prototype of my sign language translator by clicking the sign language button in the input bar.";
         addMessage(response, 'ai');
         speakText(response, 'cheerful');
         return;
@@ -289,7 +279,6 @@ How are you feeling today?`;
   return (
     <>
     {isCameraOpen && <CameraCapture onCapture={handlePhotoCaptured} onClose={() => setIsCameraOpen(false)} />}
-    {isSignModeOpen && <SignLanguageMode onClose={() => setIsSignModeOpen(false)} />}
 
     <div className="flex flex-col h-full max-w-4xl mx-auto">
       <div className="flex-1 overflow-y-auto pr-4 space-y-6">
@@ -369,9 +358,6 @@ How are you feeling today?`;
                 {isLoading ? <LoadingSpinner size="w-5 h-5" /> : ICONS.send('w-5 h-5')}
             </button>
         </div>
-        <button onClick={() => setIsSignModeOpen(true)} className="p-3 rounded-full glass-card border-emerald-500/20 text-emerald-400 hover:text-white hover:border-emerald-500/40 hover:scale-110 transition-all duration-300">
-            {ICONS.sign('w-6 h-6')}
-        </button>
         <button onClick={() => setIsCameraOpen(true)} className="p-3 rounded-full glass-card border-emerald-500/20 text-emerald-400 hover:text-white hover:border-emerald-500/40 hover:scale-110 transition-all duration-300">
             {ICONS.camera('w-6 h-6')}
         </button>
