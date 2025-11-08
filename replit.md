@@ -27,7 +27,11 @@ Kindred is an AI-powered companion app that uses Google's Gemini API to provide 
 
 ### Key Features
 1. **Kindred Chat**: Conversational AI with voice interaction
-2. **Visual Assistant**: Camera-based image analysis for plant identification and object recognition
+2. **Visual Assistant**: Camera-based image analysis with simplified, structured responses:
+   - What is it? (Identification)
+   - What's it used for? (Uses and benefits)
+   - Side Effects & Risks (Safety information)
+   - What to Avoid (Precautions)
 3. **Sign Language Mode**: Sign language translation support
 4. **Settings**: Customizable voice, language, and user preferences
 
@@ -72,6 +76,10 @@ This project is configured for Replit's autoscale deployment:
   - Eliminated lag between text and audio by making speech generation non-blocking
   - Audio generation starts immediately in the background while text is displayed
   - Speech plays as soon as it's ready without blocking the UI
+- Simplified visual assistant image analysis:
+  - Restructured responses into 4 clear sections: What is it?, What's it used for?, Side Effects & Risks, What to Avoid
+  - Uses simple, everyday language instead of technical jargon
+  - Provides practical, concise information focused on user safety and understanding
 
 ## User Preferences
 - None specified yet
