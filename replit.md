@@ -10,7 +10,8 @@ Kindred is an AI-powered companion app that uses Google's Gemini API to provide 
 - **Build Tool**: Vite 6.2.0
 - **AI Service**: Google Gemini API (@google/genai)
 - **Database**: PostgreSQL with Drizzle ORM
-- **Storage**: localStorage for client-side data persistence (chat history, medical data)
+- **Storage**: localStorage for client-side data persistence (chat history, medical data, improvement records)
+- **Charts**: Recharts for data visualization
 - **Deployment**: Configured for Replit autoscale deployment
 
 ### Project Structure
@@ -21,13 +22,14 @@ Kindred is an AI-powered companion app that uses Google's Gemini API to provide 
 │   ├── main/           # Main app layout (header, sidebar, main app)
 │   └── ui/             # Reusable UI components
 ├── hooks/              # Custom React hooks (auth, speech recognition)
-├── services/           # API services (Gemini AI, audio processing, medical analysis, chat history)
+├── services/           # API services (Gemini AI, audio processing, medical analysis, chat history, improvement tracking)
 │   ├── gemini.ts       # Gemini AI chat and image analysis
 │   ├── medical.ts      # Medical document analysis and medication scheduling
 │   ├── audio.ts        # Audio processing and speech synthesis
-│   └── chatHistory.ts  # Chat history storage and retrieval
+│   ├── chatHistory.ts  # Chat history storage and retrieval
+│   └── improvementTracking.ts  # Daily/monthly improvement tracking
 ├── shared/             # Database schema (Drizzle ORM)
-│   └── schema.ts       # Medical reports, prescriptions, medications, schedules, chat messages
+│   └── schema.ts       # Medical reports, prescriptions, medications, schedules, chat messages, improvement records
 ├── server/             # Server utilities
 │   └── storage.ts      # Database connection (PostgreSQL)
 ├── utils/              # Helper utilities
@@ -39,24 +41,33 @@ Kindred is an AI-powered companion app that uses Google's Gemini API to provide 
 1. **Kindred Chat**: Conversational AI with voice interaction
    - Automatic chat history saving
    - Access past conversations (up to 30 days) in Settings
-2. **Visual Assistant**: Camera-based image analysis with simplified, structured responses:
+2. **Creative Dashboard**: Track day-by-day improvements across multiple dimensions
+   - Log daily scores (1-10 scale) for emotional, mental, physical, and medical well-being
+   - Optional notes for each dimension
+   - Daily view: 30-day line graphs showing all 4 dimensions
+   - Monthly view: 6-month aggregated averages
+   - Recent insights cards with latest scores
+   - Date picker to backdate missed entries
+   - Color-coded visualizations (purple, blue, green, pink)
+   - Client-side data persistence via localStorage
+3. **Visual Assistant**: Camera-based image analysis with simplified, structured responses:
    - What is it? (Identification)
    - What's it used for? (Uses and benefits)
    - Side Effects & Risks (Safety information)
    - What to Avoid (Precautions)
-3. **Medical Manager**: AI-powered medical document analysis and medication tracking:
+4. **Medical Manager**: AI-powered medical document analysis and medication tracking:
    - Upload and analyze prescriptions and medical reports
    - Automatic medication schedule extraction via Gemini AI
    - 14-day medication calendar with check-off functionality
    - Safety precautions and warnings display
    - Client-side data persistence via localStorage
-4. **Sign Language Mode**: Sign language translation support
-5. **Chat History**: View and browse past conversations
+5. **Sign Language Mode**: Sign language translation support
+6. **Chat History**: View and browse past conversations
    - Day-by-day organization of past 30 days
    - Accessible through Settings
    - User and Kindred messages clearly distinguished
    - Timestamps and message counts for each day
-6. **Settings**: Customizable voice, language, and user preferences
+7. **Settings**: Customizable voice, language, and user preferences
    - View chat history (past 30 days)
    - Clear all chat history
 
@@ -127,6 +138,20 @@ This project is configured for Replit's autoscale deployment:
   - Integrated into Settings with toggle view for past 30 days
   - Updated KindredChat to save all user and AI messages
   - Clear chat history now clears both localStorage entries
+- **Implemented Creative Dashboard for improvement tracking**:
+  - Installed recharts library for professional graph visualization
+  - Created improvement_records table in PostgreSQL database (ready for backend integration)
+  - Implemented improvementTracking service with localStorage persistence
+  - Built CreativeDashboard component with:
+    * Daily log form with 4 sliders (1-10 scale) for emotional, mental, physical, and medical well-being
+    * Optional notes for each dimension
+    * Date picker to backdate missed entries
+    * Daily view: 30-day line graphs showing all 4 dimensions
+    * Monthly view: 6-month aggregated averages with automatic calculations
+    * Recent Insights cards displaying latest scores and notes
+    * Color-coded visualizations (purple, blue, green, pink)
+  - Added Dashboard navigation item to sidebar with chart icon
+  - Client-side data persistence using localStorage
 
 ## User Preferences
 - None specified yet
