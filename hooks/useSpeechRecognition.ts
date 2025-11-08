@@ -27,6 +27,7 @@ export const useSpeechRecognition = (language: string, options: SpeechRecognitio
   const recognitionRef = useRef<SpeechRecognition | null>(null);
   const wakeWordTriggeredRef = useRef(false);
   const finalTranscriptRef = useRef('');
+  const silenceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (!SpeechRecognitionImpl) {
@@ -66,10 +67,31 @@ export const useSpeechRecognition = (language: string, options: SpeechRecognitio
       if (finalTranscript) {
         finalTranscriptRef.current = (finalTranscriptRef.current + ' ' + finalTranscript).trim();
       }
+
+      // Auto-stop after silence: Reset the silence timer whenever new speech is detected
+      if (silenceTimerRef.current) {
+        clearTimeout(silenceTimerRef.current);
+      }
+      
+      // If we have any transcript, set a timer to auto-stop after 1.5 seconds of silence
+      if ((finalTranscript || interimTranscript) && recognitionRef.current) {
+        silenceTimerRef.current = setTimeout(() => {
+          if (recognitionRef.current && isListening) {
+            recognitionRef.current.stop();
+          }
+        }, 1500); // Stop after 1.5 seconds of silence
+      }
     };
     
     recognition.onend = () => {
         setIsListening(false);
+        
+        // Clear the silence timer
+        if (silenceTimerRef.current) {
+          clearTimeout(silenceTimerRef.current);
+          silenceTimerRef.current = null;
+        }
+        
         if (options.onSpeechEnd) {
             options.onSpeechEnd(finalTranscriptRef.current);
         }
@@ -85,6 +107,9 @@ export const useSpeechRecognition = (language: string, options: SpeechRecognitio
     recognitionRef.current = recognition;
     
     return () => {
+        if (silenceTimerRef.current) {
+          clearTimeout(silenceTimerRef.current);
+        }
         if(recognitionRef.current) {
             recognitionRef.current.stop();
         }

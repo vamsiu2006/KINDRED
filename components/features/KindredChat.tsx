@@ -149,6 +149,13 @@ const KindredChat: React.FC<KindredChatProps> = ({ user, onUserOnboarded }) => {
               // If only wake word was said, just start listening again actively.
               startListening(false);
           }
+      } else if (!isVoiceMode && finalTranscript) {
+          // Regular mic button usage - auto-submit the message
+          const command = finalTranscript.toLowerCase().replace('hey kindred', '').trim();
+          if(command) {
+              handleSendMessage(command);
+              setInput(''); // Clear input after sending
+          }
       }
       setIsPassiveListening(false);
   }, [isVoiceMode, handleSendMessage]);
