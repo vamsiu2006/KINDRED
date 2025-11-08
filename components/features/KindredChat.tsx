@@ -162,23 +162,31 @@ const KindredChat: React.FC<KindredChatProps> = ({ user, onUserOnboarded }) => {
   useEffect(() => {
     // Onboarding logic for new users
     if (!user.hasBeenOnboarded) {
-      const onboardingMessages = [
-        { text: `Hello ${user.name}! I'm Kindred, your personal AI companion. It's wonderful to meet you.`, delay: 1000 },
-        { text: "I'm here to listen, help, and explore ideas with you. Think of me as a supportive friend.", delay: 2500 },
-        { text: "You can talk to me by typing, or you can click the microphone button and say 'Hey Kindred' to start a voice chat. You can also show me things using the camera button!", delay: 4500 },
-        { text: "How are you feeling today?", delay: 5500 },
-      ];
+      const introductionText = `Hello ${user.name}! I'm Kindred, your personal AI companion designed to support your health and wellness journey. I'm here to provide empathetic conversations, help you track your well-being, and assist with your daily health needs.
 
-      let delay = 0;
-      onboardingMessages.forEach(msg => {
-        delay += msg.delay;
-        setTimeout(() => {
-          addMessage(msg.text, 'ai');
-        }, msg.delay);
-      });
+Here's what I can help you with:
+
+🗣️ Kindred Chat: Have meaningful conversations with me - I'm here to listen, support, and chat about anything on your mind. You can type or use voice by saying "Hey Kindred".
+
+📸 Visual Assistant: Show me images using the camera button, and I'll help identify medications, read labels, or explain what you're seeing.
+
+🏥 Medical Manager: Upload your prescription images and I'll create medication schedules, track your doses, and remind you of safety precautions.
+
+📊 Creative Dashboard: Track your daily emotional, mental, physical, and medical well-being with personalized AI insights and weekly reports.
+
+💬 Chat History: Review our past conversations anytime - I remember our talks so you can look back on your progress.
+
+I use voice interaction for a natural conversation experience, and I'm available whenever you need support, guidance, or just someone to talk to.
+
+How are you feeling today?`;
       
-      setTimeout(() => onUserOnboarded(), delay);
-      return; // Skip loading history for the first time
+      setTimeout(() => {
+        addMessage(introductionText, 'ai');
+        speakText(introductionText, 'cheerful');
+      }, 1000);
+      
+      setTimeout(() => onUserOnboarded(), 2000);
+      return;
     }
 
     const storedHistory = localStorage.getItem(chatHistoryKey);
@@ -192,13 +200,16 @@ const KindredChat: React.FC<KindredChatProps> = ({ user, onUserOnboarded }) => {
     } else {
         const welcomeMessage: Message = {
             id: 'welcome-1',
-            text: `Hello ${user.name}, welcome back!`,
+            text: `Hello ${user.name}, welcome back! How are you feeling today?`,
             sender: 'ai',
             timestamp: new Date().toISOString(),
         }
         setMessages([welcomeMessage]);
+        setTimeout(() => {
+          speakText(welcomeMessage.text, 'cheerful');
+        }, 500);
     }
-  }, [user.name, user.hasBeenOnboarded, chatHistoryKey, onUserOnboarded, addMessage]);
+  }, [user.name, user.hasBeenOnboarded, chatHistoryKey, onUserOnboarded, addMessage, speakText]);
 
   useEffect(() => {
     if (messages.length > 0) {
