@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { User, Message, Language } from '../../types';
 import { useSpeechRecognition } from '../../hooks/useSpeechRecognition';
-import { generateChatResponse, generateSpeech, analyzeImage, analyzeSentiment } from '../../services/gemini';
-import { playAudio } from '../../services/audio';
+import { generateChatResponse, analyzeImage } from '../../services/gemini';
+import { speakTextInstantly } from '../../services/audio';
 import { fileToBase64 } from '../../utils/helpers';
 import { SUPPORTED_LANGUAGES, ICONS } from '../../constants';
 import LoadingSpinner from '../ui/LoadingSpinner';
@@ -64,12 +64,9 @@ const KindredChat: React.FC<KindredChatProps> = ({ user, onUserOnboarded }) => {
   const speakText = useCallback(async (text: string, tone: 'soothing' | 'cheerful' | 'neutral' = 'neutral') => {
     try {
       setIsSpeaking(true);
-      const audioData = await generateSpeech(text, user.voiceName, tone);
-      if (audioData) {
-        await playAudio(audioData);
-      }
+      await speakTextInstantly(text, user.voiceName);
     } catch (error) {
-      console.error("Failed to generate or play speech:", error);
+      console.error("Failed to speak text:", error);
     } finally {
       setIsSpeaking(false);
       if (isVoiceMode) {

@@ -1,62 +1,43 @@
 // This is a browser-only utility.
 
-const decode = (base64: string): Uint8Array => {
-  const binaryString = atob(base64);
-  const len = binaryString.length;
-  const bytes = new Uint8Array(len);
-  for (let i = 0; i < len; i++) {
-    bytes[i] = binaryString.charCodeAt(i);
-  }
-  return bytes;
-};
-
-const decodeAudioData = async (
-  data: Uint8Array,
-  ctx: AudioContext,
-  sampleRate: number,
-  numChannels: number,
-): Promise<AudioBuffer> => {
-  const dataInt16 = new Int16Array(data.buffer);
-  const frameCount = dataInt16.length / numChannels;
-  const buffer = ctx.createBuffer(numChannels, frameCount, sampleRate);
-
-  for (let channel = 0; channel < numChannels; channel++) {
-    const channelData = buffer.getChannelData(channel);
-    for (let i = 0; i < frameCount; i++) {
-      channelData[i] = dataInt16[i * numChannels + channel] / 32768.0;
-    }
-  }
-  return buffer;
-};
-
-let audioContext: AudioContext | null = null;
-const getAudioContext = (): AudioContext => {
-    if (!audioContext || audioContext.state === 'closed') {
-        audioContext = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
-    }
-    return audioContext;
-}
-
-export const playAudio = async (base64Audio: string): Promise<void> => {
+export const speakTextInstantly = async (text: string, voiceName?: string): Promise<void> => {
+  return new Promise((resolve, reject) => {
     try {
-        const ctx = getAudioContext();
-        if (ctx.state === 'suspended') {
-            await ctx.resume();
+      if (!('speechSynthesis' in window)) {
+        console.error('Browser does not support speech synthesis');
+        resolve();
+        return;
+      }
+
+      // Cancel any ongoing speech
+      window.speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      
+      // Set voice if available
+      const voices = window.speechSynthesis.getVoices();
+      if (voiceName && voices.length > 0) {
+        const voice = voices.find(v => v.name.includes(voiceName)) || voices.find(v => v.lang.startsWith('en'));
+        if (voice) {
+          utterance.voice = voice;
         }
+      }
+      
+      // Configure speech parameters for pleasant, natural speech
+      utterance.rate = 1.0;  // Normal speed
+      utterance.pitch = 1.0; // Normal pitch
+      utterance.volume = 1.0; // Full volume
 
-        const audioBytes = decode(base64Audio);
-        const audioBuffer = await decodeAudioData(audioBytes, ctx, 24000, 1);
-        
-        const source = ctx.createBufferSource();
-        source.buffer = audioBuffer;
-        source.connect(ctx.destination);
-        source.start();
+      utterance.onend = () => resolve();
+      utterance.onerror = (error) => {
+        console.error('Speech synthesis error:', error);
+        resolve(); // Resolve anyway to not block execution
+      };
 
-        return new Promise(resolve => {
-            source.onended = () => resolve();
-        });
-
+      window.speechSynthesis.speak(utterance);
     } catch (error) {
-        console.error("Failed to play audio:", error);
+      console.error('Failed to speak text:', error);
+      resolve();
     }
+  });
 };
