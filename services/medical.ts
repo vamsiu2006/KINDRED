@@ -38,15 +38,18 @@ export const analyzeMedicalDocument = async (
   documentType: 'prescription' | 'medical_report'
 ): Promise<MedicalAnalysisResult> => {
   try {
-    const imagePart = {
+    const documentPart = {
       inlineData: {
         data: base64Image,
         mimeType: mimeType,
       },
     };
 
+    const isPDF = mimeType === 'application/pdf';
+    const docType = isPDF ? 'PDF document' : 'image';
+
     const prompt = documentType === 'prescription' 
-      ? `You are KINDRED, a medical assistant AI. Analyze this prescription image and extract detailed information.
+      ? `You are KINDRED, a medical assistant AI. Analyze this prescription ${docType} and extract detailed information.
 
 **CRITICAL: Respond ONLY with valid JSON. No additional text before or after the JSON.**
 
@@ -76,7 +79,7 @@ Extract and return a JSON object with this exact structure:
 }
 
 Be thorough and accurate. If information is not clearly visible, use empty strings or arrays.`
-      : `You are KINDRED, a medical assistant AI. Analyze this medical report and extract health information.
+      : `You are KINDRED, a medical assistant AI. Analyze this medical report ${docType} and extract health information.
 
 **CRITICAL: Respond ONLY with valid JSON. No additional text before or after the JSON.**
 
@@ -107,7 +110,7 @@ Provide actionable, specific safety precautions based on the medical findings.`;
 
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
-      contents: { parts: [imagePart, textPart] },
+      contents: { parts: [documentPart, textPart] },
     });
 
     const responseText = response.text.trim();

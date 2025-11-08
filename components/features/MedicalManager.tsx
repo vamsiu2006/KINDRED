@@ -51,11 +51,12 @@ const MedicalManager: React.FC<MedicalManagerProps> = ({ user }) => {
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      if (file.type.startsWith('image/')) {
+      const validTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp', 'application/pdf'];
+      if (validTypes.some(type => file.type === type || file.type.startsWith('image/'))) {
         setSelectedFile(file);
         setError(null);
       } else {
-        setError('Please select an image file (PNG, JPEG, etc.)');
+        setError('Please select an image (PNG, JPEG, WEBP) or PDF file');
       }
     }
   };
@@ -207,7 +208,7 @@ const MedicalManager: React.FC<MedicalManagerProps> = ({ user }) => {
             <div className="border-2 border-dashed border-purple-500/30 rounded-lg p-8 text-center bg-black/20">
               <input
                 type="file"
-                accept="image/*"
+                accept="image/*,.pdf,application/pdf"
                 onChange={handleFileSelect}
                 className="hidden"
                 id="medical-file-upload"
@@ -216,11 +217,18 @@ const MedicalManager: React.FC<MedicalManagerProps> = ({ user }) => {
                 htmlFor="medical-file-upload"
                 className="cursor-pointer flex flex-col items-center gap-4"
               >
-                <div className="text-6xl">📄</div>
-                <div className="text-purple-300">
-                  {selectedFile ? selectedFile.name : 'Click to upload an image'}
+                <div className="text-6xl">
+                  {selectedFile?.type === 'application/pdf' ? '📑' : '📄'}
                 </div>
-                <div className="text-sm text-gray-400">PNG, JPG, JPEG supported</div>
+                <div className="text-purple-300 font-medium">
+                  {selectedFile ? selectedFile.name : 'Click to upload a document'}
+                </div>
+                <div className="text-sm text-gray-400">
+                  Supported: Images (PNG, JPG, JPEG, WEBP) and PDF files
+                </div>
+                <div className="text-xs text-cyan-400 mt-2">
+                  💡 Tip: For DOCX files, please convert to PDF first
+                </div>
               </label>
             </div>
 
