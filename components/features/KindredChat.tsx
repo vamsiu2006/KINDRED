@@ -61,6 +61,23 @@ const KindredChat: React.FC<KindredChatProps> = ({ user, onUserOnboarded }) => {
       return newMessage;
   }, []);
 
+  const speakText = useCallback(async (text: string, tone: 'soothing' | 'cheerful' | 'neutral' = 'neutral') => {
+    try {
+      setIsSpeaking(true);
+      const audioData = await generateSpeech(text, user.voiceName, tone);
+      if (audioData) {
+        await playAudio(audioData);
+      }
+    } catch (error) {
+      console.error("Failed to generate or play speech:", error);
+    } finally {
+      setIsSpeaking(false);
+      if (isVoiceMode) {
+        startListening(false);
+      }
+    }
+  }, [user.voiceName, isVoiceMode]);
+
   const handleSendMessage = useCallback(async (messageText: string) => {
     if ((!messageText.trim() && !pendingImage) || isLoading) return;
 
@@ -78,50 +95,36 @@ const KindredChat: React.FC<KindredChatProps> = ({ user, onUserOnboarded }) => {
     setInput('');
 
     if (visualKeywords.some(kw => text.includes(kw))) {
-        addMessage("Of course. Please use the camera button to show me what you'd like me to see.", 'ai');
+        const response = "Of course. Please use the camera button to show me what you'd like me to see.";
+        addMessage(response, 'ai');
+        speakText(response, 'cheerful');
         return;
     }
 
     if (signKeywords.some(kw => text.includes(kw))) {
-        addMessage("I'm developing a feature for that! You can try a prototype of my sign language translator by clicking the sign language button in the input bar.", 'ai');
+        const response = "I'm developing a feature for that! You can try a prototype of my sign language translator by clicking the sign language button in the input bar.";
+        addMessage(response, 'ai');
+        speakText(response, 'cheerful');
         return;
     }
 
     setIsLoading(true);
 
     try {
-      const [sentiment, aiTextResponse] = await Promise.all([
-        analyzeSentiment(messageText),
-        generateChatResponse(user.name, messageText, messages, language.name)
-      ]);
+      const aiTextResponse = await generateChatResponse(user.name, messageText, messages, language.name);
       
       addMessage(aiTextResponse, 'ai');
       setIsLoading(false);
 
-      generateSpeech(aiTextResponse, user.voiceName, sentiment).then(async (audioData) => {
-        if (audioData) {
-          setIsSpeaking(true);
-          await playAudio(audioData);
-          setIsSpeaking(false);
-          
-          if (isVoiceMode) {
-            startListening(false);
-          }
-        } else if (isVoiceMode) {
-          startListening(false);
-        }
-      }).catch((error) => {
-        console.error("Failed to generate or play speech:", error);
-        if (isVoiceMode) {
-          startListening(false);
-        }
-      });
+      speakText(aiTextResponse, 'cheerful');
     } catch (error) {
       console.error("Failed to get response from AI", error);
-      addMessage("I'm sorry, I'm having trouble connecting right now. Please try again.", 'ai');
+      const errorMsg = "I'm sorry, I'm having trouble connecting right now. Please try again.";
+      addMessage(errorMsg, 'ai');
       setIsLoading(false);
+      speakText(errorMsg, 'soothing');
     }
-  }, [isVoiceMode, isLoading, pendingImage, user, messages, language.name, addMessage]);
+  }, [isVoiceMode, isLoading, pendingImage, user, messages, language.name, addMessage, speakText]);
 
 
   const handleWakeWord = useCallback(() => {
@@ -222,12 +225,16 @@ const KindredChat: React.FC<KindredChatProps> = ({ user, onUserOnboarded }) => {
         const base64Image = await fileToBase64(imageFile);
         const result = await analyzeImage(base64Image, imageFile.type, prompt);
         addMessage(result, 'ai');
+        setIsLoading(false);
+        speakText(result, 'cheerful');
     } catch(err) {
         console.error(err);
-        addMessage("Sorry, I had trouble analyzing that image.", 'ai');
-    } finally {
+        const errorMsg = "Sorry, I had trouble analyzing that image.";
+        addMessage(errorMsg, 'ai');
         setIsLoading(false);
-        setPendingImage(null); // Clear the pending image after sending
+        speakText(errorMsg, 'soothing');
+    } finally {
+        setPendingImage(null);
     }
   };
 
