@@ -133,7 +133,11 @@ Be encouraging, compassionate, and focus on their strengths while gently address
       model: 'gemini-2.5-flash',
       contents: [{ role: 'user' as const, parts: [{ text: prompt }] }],
     });
-    const responseText = result.text;
+    
+    const responseText = result.response?.text();
+    if (!responseText) {
+      throw new Error('No response from AI');
+    }
     
     const jsonMatch = responseText.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
@@ -256,7 +260,11 @@ Be encouraging and celebrate progress while providing constructive insights. Foc
       model: 'gemini-2.5-flash',
       contents: [{ role: 'user' as const, parts: [{ text: prompt }] }],
     });
-    const responseText = result.text;
+    
+    const responseText = result.response?.text();
+    if (!responseText) {
+      throw new Error('No response from AI');
+    }
     
     const jsonMatch = responseText.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
