@@ -199,6 +199,23 @@ This project is configured for Replit's autoscale deployment:
   - Message automatically submits when mic stops (like pressing Enter)
   - Improved user experience - no manual clicking required
   - Maintains separate behavior for voice mode ("Hey Kindred") vs regular mic button usage
+- **Improved Voice Quality and Selection**:
+  - Added intelligent voice selection with 6 options in Settings:
+    * Female Voice (US) - Warm & Natural (default)
+    * Female Voice (UK) - Clear & Professional
+    * Female Voice (Natural) - Friendly & Smooth
+    * Male Voice (US) - Deep & Calm
+    * Male Voice (UK) - Refined & Clear
+    * Auto Select - Best Available
+  - Implemented comprehensive gender-aware voice matching across platforms:
+    * macOS: Samantha, Victoria, Karen (female) / Alex, Daniel (male)
+    * Windows: Zira, Jenny (female) / David, Mark (male)
+    * Chrome/Edge: Google/Microsoft female/male variants
+  - Improved speech fluency parameters:
+    * Rate: 0.95 (slightly slower for clarity and naturalness)
+    * Pitch: 1.05 (slightly higher for warmth, ideal for female voices)
+  - Smart fallback logic ensures correct gender selection
+  - Voice preference persists across sessions and is saved in user profile
 
 ## User Preferences
 - None specified yet
