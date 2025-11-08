@@ -26,11 +26,12 @@ export const SUPPORTED_LANGUAGES: Language[] = [
 ];
 
 export const SUPPORTED_VOICES: Voice[] = [
-    { name: 'Zephyr (Friendly & Warm)', id: 'Zephyr' },
-    { name: 'Kore (Calm & Clear)', id: 'Kore' },
-    { name: 'Puck (Bright & Energetic)', id: 'Puck' },
-    { name: 'Charon (Deep & Soothing)', id: 'Charon' },
-    { name: 'Fenrir (Rich & Story-like)', id: 'Fenrir' },
+    { name: 'Female Voice (US) - Warm & Natural', id: 'female-us' },
+    { name: 'Female Voice (UK) - Clear & Professional', id: 'female-uk' },
+    { name: 'Female Voice (Natural) - Friendly & Smooth', id: 'female-natural' },
+    { name: 'Male Voice (US) - Deep & Calm', id: 'male-us' },
+    { name: 'Male Voice (UK) - Refined & Clear', id: 'male-uk' },
+    { name: 'Auto Select - Best Available', id: 'auto' },
 ];
 
 

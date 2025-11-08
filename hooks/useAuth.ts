@@ -70,7 +70,7 @@ export const useAuth = () => {
         email: trimmedEmail,
         password: simpleHash(password), // Simulate hashing
         languageCode: 'en-US',
-        voiceName: 'Zephyr', // Default voice
+        voiceName: 'female-us', // Default voice - Warm & Natural
         hasBeenOnboarded: false,
     };
     
@@ -103,7 +103,7 @@ export const useAuth = () => {
             email: trimmedEmail,
             password: simpleHash(`google_oauth_secure_placeholder_${Date.now()}`), // Secure placeholder
             languageCode: 'en-US',
-            voiceName: 'Zephyr', // Default voice
+            voiceName: 'female-us', // Default voice - Warm & Natural
             hasBeenOnboarded: false,
         };
         // Use immutable update pattern to prevent bugs
