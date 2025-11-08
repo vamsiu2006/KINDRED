@@ -49,6 +49,7 @@ const KindredChat: React.FC<KindredChatProps> = ({ user, onUserOnboarded }) => {
   const language: Language = SUPPORTED_LANGUAGES.find(l => l.code === user.languageCode) || SUPPORTED_LANGUAGES[0];
   const chatHistoryKey = `kindred_chat_history_${user.name}`;
   const audioActivationRef = useRef<HTMLAudioElement>(null);
+  const hasShownIntroduction = useRef(false);
 
   const addMessage = useCallback((text: string, sender: 'user' | 'ai', image?: string) => {
       const newMessage: Message = {
@@ -160,8 +161,14 @@ const KindredChat: React.FC<KindredChatProps> = ({ user, onUserOnboarded }) => {
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (hasShownIntroduction.current) {
+      return;
+    }
+    
     // Onboarding logic for new users
     if (!user.hasBeenOnboarded) {
+      hasShownIntroduction.current = true;
+      
       const introductionText = `Hello ${user.name}! I'm Kindred, your personal AI companion designed to support your health and wellness journey. I'm here to provide empathetic conversations, help you track your well-being, and assist with your daily health needs.
 
 Here's what I can help you with:
@@ -198,6 +205,7 @@ How are you feeling today?`;
           setMessages([]);
       }
     } else {
+        hasShownIntroduction.current = true;
         const welcomeMessage: Message = {
             id: 'welcome-1',
             text: `Hello ${user.name}, welcome back! How are you feeling today?`,
