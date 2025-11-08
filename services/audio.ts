@@ -116,8 +116,27 @@ export const getBestVoice = (preference: string): SpeechSynthesisVoice | null =>
   return voices.find(v => v.lang.startsWith('en')) || voices[0];
 };
 
+// Ensure voices are loaded before using them
+const ensureVoicesLoaded = (): Promise<void> => {
+  return new Promise((resolve) => {
+    const voices = window.speechSynthesis.getVoices();
+    if (voices.length > 0) {
+      resolve();
+      return;
+    }
+    
+    // Wait for voices to load
+    window.speechSynthesis.onvoiceschanged = () => {
+      resolve();
+    };
+    
+    // Fallback timeout
+    setTimeout(() => resolve(), 1000);
+  });
+};
+
 export const speakTextInstantly = async (text: string, voiceName?: string): Promise<void> => {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     try {
       if (!('speechSynthesis' in window)) {
         console.error('Browser does not support speech synthesis');
@@ -125,15 +144,26 @@ export const speakTextInstantly = async (text: string, voiceName?: string): Prom
         return;
       }
 
+      // Wait for voices to be loaded
+      await ensureVoicesLoaded();
+
       // Cancel any ongoing speech
       window.speechSynthesis.cancel();
 
       const utterance = new SpeechSynthesisUtterance(text);
       
+      // Map old voice names to new ones for backwards compatibility
+      let mappedVoiceName = voiceName;
+      if (voiceName === 'Zephyr' || voiceName === 'Kore' || voiceName === 'Puck' || 
+          voiceName === 'Charon' || voiceName === 'Fenrir' || !voiceName) {
+        mappedVoiceName = 'female-us'; // Default to female US voice
+      }
+      
       // Get the best voice based on user preference
-      const selectedVoice = voiceName ? getBestVoice(voiceName) : getBestVoice('auto');
+      const selectedVoice = getBestVoice(mappedVoiceName);
       if (selectedVoice) {
         utterance.voice = selectedVoice;
+        console.log('Using voice:', selectedVoice.name, '(preference:', mappedVoiceName, ')');
       }
       
       // Configure speech parameters for natural, fluent speech
