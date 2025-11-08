@@ -4,6 +4,7 @@ import Sidebar from './Sidebar';
 import Header from './Header';
 import KindredChat from '../features/KindredChat';
 import Settings from '../features/Settings';
+import MedicalManager from '../features/MedicalManager';
 
 interface MainAppProps {
   user: User;
@@ -18,6 +19,8 @@ const MainApp: React.FC<MainAppProps> = ({ user, onLogout, onUpdateUser, onChang
 
   const renderView = () => {
     switch (currentView) {
+      case View.Medical:
+        return <MedicalManager user={user} />;
       case View.Settings:
         return <Settings user={user} onUpdateUser={onUpdateUser} onChangePassword={onChangePassword} onLogout={onLogout} />;
       case View.Chat:

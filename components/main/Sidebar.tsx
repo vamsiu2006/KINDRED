@@ -76,13 +76,20 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView }) => {
           KINDRED
         </h1>
       </div>
-      <div className="flex-1">
+      <div className="flex-1 space-y-2">
         <NavItem
           view={View.Chat}
           currentView={currentView}
           setCurrentView={setCurrentView}
           icon={ICONS.chat}
           label="Kindred Chat"
+        />
+        <NavItem
+          view={View.Medical}
+          currentView={currentView}
+          setCurrentView={setCurrentView}
+          icon={ICONS.medical}
+          label="Medical Manager"
         />
       </div>
        <div>

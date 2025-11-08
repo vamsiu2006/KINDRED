@@ -1,11 +1,10 @@
 import { GoogleGenAI } from "@google/genai";
 import { Message } from "../types";
 
-const API_KEY = process.env.API_KEY;
+const API_KEY = import.meta.env.VITE_API_KEY || import.meta.env.API_KEY;
 
 if (!API_KEY) {
-  // This is a fallback for development. In production, the key should be set.
-  console.warn("API_KEY environment variable not set.");
+  console.warn("Gemini API key not found in environment variables");
 }
 
 const ai = new GoogleGenAI({ apiKey: API_KEY! });
