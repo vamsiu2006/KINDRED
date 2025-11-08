@@ -192,6 +192,13 @@ This project is configured for Replit's autoscale deployment:
   - Solution: Single effect with internal user-change detection via lastUserName ref
   - Introduction now shows exactly once for new users and when users switch accounts
   - Maintains proper behavior for returning users with chat history
+- **Enhanced Voice Assistant with Auto-Submit**:
+  - Added automatic silence detection to speech recognition
+  - Mic automatically stops after 1.5 seconds of silence
+  - Transcript appears in input field while speaking
+  - Message automatically submits when mic stops (like pressing Enter)
+  - Improved user experience - no manual clicking required
+  - Maintains separate behavior for voice mode ("Hey Kindred") vs regular mic button usage
 
 ## User Preferences
 - None specified yet
