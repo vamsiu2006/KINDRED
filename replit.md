@@ -47,6 +47,15 @@ The application features a "Therapeutic & Accessible UI" with a greenish-red col
 - **Port**: 5000 (configured for Replit's webview)
 
 ## Recent Changes (November 8, 2025 - Latest)
+- **Sign Language Feature Removal**:
+  - Removed sign language button from chat interface
+  - Deleted SignLanguageMode.tsx and SignTranslator.tsx components
+  - Removed sign language keyword detection from chat
+  - Removed sign icon from constants
+  - Updated documentation to reflect streamlined feature set
+  - All other features (Chat, Dashboard, Medical Manager, Settings) remain fully functional
+
+## Previous Medical Manager Changes (November 8, 2025)
 - **Medical Manager PDF Support**:
   - Added PDF file upload support for prescriptions and medical reports
   - File validation now accepts: Images (PNG, JPG, JPEG, WEBP) and PDF files
