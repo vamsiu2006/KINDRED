@@ -50,6 +50,7 @@ const KindredChat: React.FC<KindredChatProps> = ({ user, onUserOnboarded }) => {
   const chatHistoryKey = `kindred_chat_history_${user.name}`;
   const audioActivationRef = useRef<HTMLAudioElement>(null);
   const hasShownIntroduction = useRef(false);
+  const lastUserName = useRef(user.name);
 
   const addMessage = useCallback((text: string, sender: 'user' | 'ai', image?: string) => {
       const newMessage: Message = {
@@ -161,10 +162,13 @@ const KindredChat: React.FC<KindredChatProps> = ({ user, onUserOnboarded }) => {
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    hasShownIntroduction.current = false;
-  }, [user.name]);
-
-  useEffect(() => {
+    // Check if user has changed - if so, reset the introduction flag
+    if (lastUserName.current !== user.name) {
+      hasShownIntroduction.current = false;
+      lastUserName.current = user.name;
+    }
+    
+    // If we've already shown the introduction for this user, don't show it again
     if (hasShownIntroduction.current) {
       return;
     }

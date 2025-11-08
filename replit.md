@@ -186,6 +186,12 @@ This project is configured for Replit's autoscale deployment:
   - Added text-to-speech support for both new user introduction and returning user greeting
   - Removed duplicate greeting messages for cleaner chat experience
   - Introduction ends by asking about user's well-being to start conversation naturally
+- **Fixed Double Introduction Bug**:
+  - Resolved React StrictMode issue causing duplicate introduction messages
+  - Root cause: Two separate useEffect hooks both depending on user.name created timing conflicts
+  - Solution: Single effect with internal user-change detection via lastUserName ref
+  - Introduction now shows exactly once for new users and when users switch accounts
+  - Maintains proper behavior for returning users with chat history
 
 ## User Preferences
 - None specified yet
