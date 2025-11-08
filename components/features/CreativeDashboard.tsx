@@ -206,51 +206,106 @@ export const CreativeDashboard: React.FC = () => {
     Medical: record.medicalAvg,
   }));
 
+  const getEncouragingMessage = (score: number) => {
+    if (score >= 8) return "You're doing amazingly well! 🌟";
+    if (score >= 6) return "You're making great progress! 💪";
+    if (score >= 4) return "Every step forward counts! 🌱";
+    return "Tomorrow is a new day full of possibilities! 🌅";
+  };
+
+  const latestRecord = dailyRecords.length > 0 ? dailyRecords[dailyRecords.length - 1] : null;
+
   return (
-    <div className="h-full flex flex-col bg-gradient-to-br from-purple-50 to-pink-50 p-6 overflow-y-auto">
-      <div className="max-w-6xl mx-auto w-full">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-            Creative Dashboard
-          </h1>
-          <button
-            onClick={() => setShowLogForm(!showLogForm)}
-            className="px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full font-medium hover:from-purple-600 hover:to-pink-600 transition-all shadow-lg"
-          >
-            {showLogForm ? 'Hide Log Form' : 'Log Today\'s Progress'}
-          </button>
+    <div className="h-full flex flex-col p-4 sm:p-6 lg:p-8 overflow-y-auto" style={{
+      background: 'linear-gradient(135deg, rgba(10, 20, 30, 0.95) 0%, rgba(15, 25, 35, 0.95) 100%)'
+    }}>
+      <div className="max-w-7xl mx-auto w-full space-y-6">
+        {/* Warm Welcome Header */}
+        <div className="glass-card p-6 sm:p-8 border-emerald-500/30">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <h1 className="text-3xl sm:text-4xl font-bold gradient-text mb-2" style={{
+                background: 'linear-gradient(135deg, #00ff88 0%, #00d9ff 50%, #ff3366 100%)',
+                WebkitBackgroundClip: 'text',
+                backgroundClip: 'text',
+                WebkitTextFillColor: 'transparent'
+              }}>
+                Your Wellness Journey 🌱
+              </h1>
+              <p className="text-gray-400 text-lg">Track your daily progress and celebrate every step forward</p>
+            </div>
+            <button
+              onClick={() => setShowLogForm(!showLogForm)}
+              className="btn-primary text-lg px-8 py-4 rounded-xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105"
+              style={{
+                background: showLogForm 
+                  ? 'linear-gradient(135deg, #ff3366, #ff6b9d)'
+                  : 'linear-gradient(135deg, #00ff88, #00d9ff)',
+                minWidth: '200px'
+              }}
+            >
+              {showLogForm ? '✕ Close Form' : '✨ Log Today'}
+            </button>
+          </div>
         </div>
 
+        {/* Success/Error Messages */}
         {saveMessage && (
-          <div className="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
-            {saveMessage}
+          <div className="glass-card p-6 border-emerald-500/50 animate-fade-in">
+            <div className="flex items-center gap-3">
+              <span className="text-3xl">✨</span>
+              <p className="text-emerald-300 text-lg font-medium">{saveMessage}</p>
+            </div>
           </div>
         )}
 
+        {/* Log Form - Therapeutic Design */}
         {showLogForm && (
-          <div className="bg-white rounded-2xl shadow-xl p-6 mb-6">
-            <h2 className="text-xl font-semibold mb-4 text-gray-800">Log Daily Improvements</h2>
+          <div className="glass-card p-6 sm:p-8 border-emerald-500/30 space-y-8">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="text-4xl">📝</div>
+              <div>
+                <h2 className="text-2xl sm:text-3xl font-bold text-emerald-300">How Are You Feeling Today?</h2>
+                <p className="text-gray-400 mt-1">Your feelings matter. Track your progress, one day at a time.</p>
+              </div>
+            </div>
             
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Select Date
+            {/* Date Selector */}
+            <div>
+              <label className="block text-lg font-medium text-emerald-300 mb-3">
+                📅 Select Date
               </label>
               <input
                 type="date"
                 value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
                 max={new Date().toISOString().split('T')[0]}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="input-glass w-full px-6 py-4 text-lg rounded-xl"
               />
             </div>
 
-            <div className="space-y-6">
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <label className="text-sm font-medium text-purple-600">
-                    😊 Emotional Well-being
-                  </label>
-                  <span className="text-2xl font-bold text-purple-600">{emotionalScore}/10</span>
+            {/* Wellness Trackers - Large, Accessible Design */}
+            <div className="space-y-8">
+              {/* Emotional Well-being */}
+              <div className="glass-card p-6 border-l-4" style={{borderLeftColor: '#a855f7'}}>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <span className="text-4xl">😊</span>
+                    <label className="text-xl sm:text-2xl font-bold text-purple-400">
+                      Emotional Well-being
+                    </label>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-4xl sm:text-5xl font-bold gradient-text" style={{
+                      background: 'linear-gradient(135deg, #a855f7, #ec4899)',
+                      WebkitBackgroundClip: 'text',
+                      backgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent'
+                    }}>
+                      {emotionalScore}
+                    </div>
+                    <div className="text-sm text-purple-300">{getEncouragingMessage(emotionalScore)}</div>
+                  </div>
                 </div>
                 <input
                   type="range"
@@ -258,23 +313,40 @@ export const CreativeDashboard: React.FC = () => {
                   max="10"
                   value={emotionalScore}
                   onChange={(e) => setEmotionalScore(Number(e.target.value))}
-                  className="w-full h-2 bg-purple-200 rounded-lg appearance-none cursor-pointer accent-purple-500"
+                  className="w-full h-4 rounded-lg appearance-none cursor-pointer"
+                  style={{
+                    background: `linear-gradient(to right, #a855f7 0%, #ec4899 ${emotionalScore * 10}%, rgba(255,255,255,0.1) ${emotionalScore * 10}%)`
+                  }}
                 />
                 <textarea
                   value={emotionalNotes}
                   onChange={(e) => setEmotionalNotes(e.target.value)}
-                  placeholder="How are you feeling emotionally today? (optional)"
-                  className="w-full mt-2 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  rows={2}
+                  placeholder="How are you feeling emotionally? Share your thoughts... (optional)"
+                  className="input-glass w-full mt-4 px-4 py-3 text-base rounded-xl"
+                  rows={3}
                 />
               </div>
 
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <label className="text-sm font-medium text-blue-600">
-                    🧠 Mental Clarity
-                  </label>
-                  <span className="text-2xl font-bold text-blue-600">{mentalScore}/10</span>
+              {/* Mental Clarity */}
+              <div className="glass-card p-6 border-l-4" style={{borderLeftColor: '#3b82f6'}}>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <span className="text-4xl">🧠</span>
+                    <label className="text-xl sm:text-2xl font-bold text-blue-400">
+                      Mental Clarity
+                    </label>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-4xl sm:text-5xl font-bold gradient-text" style={{
+                      background: 'linear-gradient(135deg, #3b82f6, #06b6d4)',
+                      WebkitBackgroundClip: 'text',
+                      backgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent'
+                    }}>
+                      {mentalScore}
+                    </div>
+                    <div className="text-sm text-blue-300">{getEncouragingMessage(mentalScore)}</div>
+                  </div>
                 </div>
                 <input
                   type="range"
@@ -282,23 +354,40 @@ export const CreativeDashboard: React.FC = () => {
                   max="10"
                   value={mentalScore}
                   onChange={(e) => setMentalScore(Number(e.target.value))}
-                  className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                  className="w-full h-4 rounded-lg appearance-none cursor-pointer"
+                  style={{
+                    background: `linear-gradient(to right, #3b82f6 0%, #06b6d4 ${mentalScore * 10}%, rgba(255,255,255,0.1) ${mentalScore * 10}%)`
+                  }}
                 />
                 <textarea
                   value={mentalNotes}
                   onChange={(e) => setMentalNotes(e.target.value)}
-                  placeholder="How is your mental clarity and focus? (optional)"
-                  className="w-full mt-2 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  rows={2}
+                  placeholder="How is your mental clarity and focus today? (optional)"
+                  className="input-glass w-full mt-4 px-4 py-3 text-base rounded-xl"
+                  rows={3}
                 />
               </div>
 
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <label className="text-sm font-medium text-green-600">
-                    💪 Physical Health
-                  </label>
-                  <span className="text-2xl font-bold text-green-600">{physicalScore}/10</span>
+              {/* Physical Health */}
+              <div className="glass-card p-6 border-l-4" style={{borderLeftColor: '#22c55e'}}>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <span className="text-4xl">💪</span>
+                    <label className="text-xl sm:text-2xl font-bold text-green-400">
+                      Physical Health
+                    </label>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-4xl sm:text-5xl font-bold gradient-text" style={{
+                      background: 'linear-gradient(135deg, #22c55e, #10b981)',
+                      WebkitBackgroundClip: 'text',
+                      backgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent'
+                    }}>
+                      {physicalScore}
+                    </div>
+                    <div className="text-sm text-green-300">{getEncouragingMessage(physicalScore)}</div>
+                  </div>
                 </div>
                 <input
                   type="range"
@@ -306,23 +395,40 @@ export const CreativeDashboard: React.FC = () => {
                   max="10"
                   value={physicalScore}
                   onChange={(e) => setPhysicalScore(Number(e.target.value))}
-                  className="w-full h-2 bg-green-200 rounded-lg appearance-none cursor-pointer accent-green-500"
+                  className="w-full h-4 rounded-lg appearance-none cursor-pointer"
+                  style={{
+                    background: `linear-gradient(to right, #22c55e 0%, #10b981 ${physicalScore * 10}%, rgba(255,255,255,0.1) ${physicalScore * 10}%)`
+                  }}
                 />
                 <textarea
                   value={physicalNotes}
                   onChange={(e) => setPhysicalNotes(e.target.value)}
                   placeholder="How is your physical health and energy? (optional)"
-                  className="w-full mt-2 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                  rows={2}
+                  className="input-glass w-full mt-4 px-4 py-3 text-base rounded-xl"
+                  rows={3}
                 />
               </div>
 
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <label className="text-sm font-medium text-pink-600">
-                    🏥 Medical Progress
-                  </label>
-                  <span className="text-2xl font-bold text-pink-600">{medicalScore}/10</span>
+              {/* Medical Progress */}
+              <div className="glass-card p-6 border-l-4" style={{borderLeftColor: '#f472b6'}}>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <span className="text-4xl">🏥</span>
+                    <label className="text-xl sm:text-2xl font-bold text-pink-400">
+                      Medical Progress
+                    </label>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-4xl sm:text-5xl font-bold gradient-text" style={{
+                      background: 'linear-gradient(135deg, #f472b6, #ec4899)',
+                      WebkitBackgroundClip: 'text',
+                      backgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent'
+                    }}>
+                      {medicalScore}
+                    </div>
+                    <div className="text-sm text-pink-300">{getEncouragingMessage(medicalScore)}</div>
+                  </div>
                 </div>
                 <input
                   type="range"
@@ -330,49 +436,71 @@ export const CreativeDashboard: React.FC = () => {
                   max="10"
                   value={medicalScore}
                   onChange={(e) => setMedicalScore(Number(e.target.value))}
-                  className="w-full h-2 bg-pink-200 rounded-lg appearance-none cursor-pointer accent-pink-500"
+                  className="w-full h-4 rounded-lg appearance-none cursor-pointer"
+                  style={{
+                    background: `linear-gradient(to right, #f472b6 0%, #ec4899 ${medicalScore * 10}%, rgba(255,255,255,0.1) ${medicalScore * 10}%)`
+                  }}
                 />
                 <textarea
                   value={medicalNotes}
                   onChange={(e) => setMedicalNotes(e.target.value)}
-                  placeholder="Any medical improvements or concerns? (optional)"
-                  className="w-full mt-2 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                  rows={2}
+                  placeholder="How is your medical progress? Any improvements or concerns? (optional)"
+                  className="input-glass w-full mt-4 px-4 py-3 text-base rounded-xl"
+                  rows={3}
                 />
               </div>
             </div>
 
+            {/* Save Button - Large & Encouraging */}
             <button
               onClick={handleSaveRecord}
               disabled={loading}
-              className="w-full mt-6 px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg font-medium hover:from-purple-600 hover:to-pink-600 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full mt-8 px-8 py-5 text-xl font-bold rounded-xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{
+                background: loading 
+                  ? 'linear-gradient(135deg, #6b7280, #9ca3af)'
+                  : 'linear-gradient(135deg, #00ff88, #00d9ff)'
+              }}
             >
-              {loading ? 'Saving...' : 'Save Progress'}
+              {loading ? '💫 Saving Your Progress...' : '✨ Save My Progress'}
             </button>
           </div>
         )}
 
-        <div className="bg-white rounded-2xl shadow-xl p-6">
-          <div className="flex gap-4 mb-6">
+        {/* Progress Charts - Visual & Encouraging */}
+        <div className="glass-card p-6 sm:p-8 border-emerald-500/30">
+          <h2 className="text-2xl sm:text-3xl font-bold text-emerald-300 mb-6">📊 Your Progress Over Time</h2>
+          
+          <div className="flex flex-wrap gap-3 mb-6">
             <button
               onClick={() => setViewMode('daily')}
-              className={`px-6 py-2 rounded-lg font-medium transition-all ${
+              className={`px-6 py-3 text-lg rounded-xl font-medium transition-all shadow-md hover:scale-105 ${
                 viewMode === 'daily'
-                  ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'text-white'
+                  : 'glass-card border-emerald-500/20 text-emerald-300 hover:border-emerald-500/40'
               }`}
+              style={{
+                background: viewMode === 'daily' 
+                  ? 'linear-gradient(135deg, #00ff88, #00d9ff)'
+                  : undefined
+              }}
             >
-              Daily View (30 Days)
+              📅 Last 30 Days
             </button>
             <button
               onClick={() => setViewMode('monthly')}
-              className={`px-6 py-2 rounded-lg font-medium transition-all ${
+              className={`px-6 py-3 text-lg rounded-xl font-medium transition-all shadow-md hover:scale-105 ${
                 viewMode === 'monthly'
-                  ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'text-white'
+                  : 'glass-card border-emerald-500/20 text-emerald-300 hover:border-emerald-500/40'
               }`}
+              style={{
+                background: viewMode === 'monthly' 
+                  ? 'linear-gradient(135deg, #00ff88, #00d9ff)'
+                  : undefined
+              }}
             >
-              Monthly View (6 Months)
+              📈 Last 6 Months
             </button>
           </div>
 

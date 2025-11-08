@@ -101,48 +101,76 @@ const MedicalManager: React.FC<MedicalManagerProps> = ({ user }) => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-gradient-to-br from-purple-900/20 via-black/40 to-pink-900/20">
-      {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-purple-500/20 bg-black/30">
-        <h2 className="text-xl font-semibold text-white flex items-center gap-2">
-          <span className="text-2xl">🏥</span>
-          Medical Manager
-        </h2>
-      </div>
+    <div className="flex flex-col h-full p-4 sm:p-6 lg:p-8 overflow-y-auto" style={{
+      background: 'linear-gradient(135deg, rgba(10, 20, 30, 0.95) 0%, rgba(15, 25, 35, 0.95) 100%)'
+    }}>
+      <div className="max-w-7xl mx-auto w-full space-y-6">
+        {/* Warm Header */}
+        <div className="glass-card p-6 sm:p-8 border-emerald-500/30">
+          <div className="flex items-center gap-4">
+            <span className="text-5xl">🏥</span>
+            <div>
+              <h2 className="text-3xl sm:text-4xl font-bold gradient-text" style={{
+                background: 'linear-gradient(135deg, #00ff88 0%, #00d9ff 50%, #ff3366 100%)',
+                WebkitBackgroundClip: 'text',
+                backgroundClip: 'text',
+                WebkitTextFillColor: 'transparent'
+              }}>
+                Medical Manager
+              </h2>
+              <p className="text-gray-400 text-lg mt-1">Manage your medications and health safely</p>
+            </div>
+          </div>
+        </div>
 
-      {/* Tabs */}
-      <div className="flex border-b border-purple-500/20 bg-black/20">
-        <button
-          onClick={() => setActiveTab('upload')}
-          className={`px-6 py-3 font-medium transition-colors ${
-            activeTab === 'upload'
-              ? 'text-purple-300 border-b-2 border-purple-500 bg-purple-500/10'
-              : 'text-gray-400 hover:text-purple-300'
-          }`}
-        >
-          📤 Upload
-        </button>
-        <button
-          onClick={() => setActiveTab('calendar')}
-          className={`px-6 py-3 font-medium transition-colors ${
-            activeTab === 'calendar'
-              ? 'text-purple-300 border-b-2 border-purple-500 bg-purple-500/10'
-              : 'text-gray-400 hover:text-purple-300'
-          }`}
-        >
-          📅 Medication Calendar
-        </button>
-        <button
-          onClick={() => setActiveTab('safety')}
-          className={`px-6 py-3 font-medium transition-colors ${
-            activeTab === 'safety'
-              ? 'text-purple-300 border-b-2 border-purple-500 bg-purple-500/10'
-              : 'text-gray-400 hover:text-purple-300'
-          }`}
-        >
-          ⚕️ Safety Precautions
-        </button>
-      </div>
+        {/* Large, Accessible Tabs */}
+        <div className="flex flex-wrap gap-3">
+          <button
+            onClick={() => setActiveTab('upload')}
+            className={`px-8 py-4 text-lg rounded-xl font-medium transition-all shadow-md hover:scale-105 ${
+              activeTab === 'upload'
+                ? 'text-white'
+                : 'glass-card border-emerald-500/20 text-emerald-300 hover:border-emerald-500/40'
+            }`}
+            style={{
+              background: activeTab === 'upload' 
+                ? 'linear-gradient(135deg, #00ff88, #00d9ff)'
+                : undefined
+            }}
+          >
+            📤 Upload Document
+          </button>
+          <button
+            onClick={() => setActiveTab('calendar')}
+            className={`px-8 py-4 text-lg rounded-xl font-medium transition-all shadow-md hover:scale-105 ${
+              activeTab === 'calendar'
+                ? 'text-white'
+                : 'glass-card border-emerald-500/20 text-emerald-300 hover:border-emerald-500/40'
+            }`}
+            style={{
+              background: activeTab === 'calendar' 
+                ? 'linear-gradient(135deg, #00ff88, #00d9ff)'
+                : undefined
+            }}
+          >
+            📅 My Medications
+          </button>
+          <button
+            onClick={() => setActiveTab('safety')}
+            className={`px-8 py-4 text-lg rounded-xl font-medium transition-all shadow-md hover:scale-105 ${
+              activeTab === 'safety'
+                ? 'text-white'
+                : 'glass-card border-emerald-500/20 text-emerald-300 hover:border-emerald-500/40'
+            }`}
+            style={{
+              background: activeTab === 'safety' 
+                ? 'linear-gradient(135deg, #00ff88, #00d9ff)'
+                : undefined
+            }}
+          >
+            ⚕️ Safety Info
+          </button>
+        </div>
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto p-6">
@@ -253,6 +281,7 @@ const MedicalManager: React.FC<MedicalManagerProps> = ({ user }) => {
         {activeTab === 'safety' && (
           <SafetyPrecautions userId={user.name} precautions={storedData.precautions} />
         )}
+      </div>
       </div>
     </div>
   );
