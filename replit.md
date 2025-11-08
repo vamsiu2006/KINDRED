@@ -22,14 +22,15 @@ Kindred is an AI-powered companion app that uses Google's Gemini API to provide 
 │   ├── main/           # Main app layout (header, sidebar, main app)
 │   └── ui/             # Reusable UI components
 ├── hooks/              # Custom React hooks (auth, speech recognition)
-├── services/           # API services (Gemini AI, audio processing, medical analysis, chat history, improvement tracking)
+├── services/           # API services (Gemini AI, audio processing, medical analysis, chat history, improvement tracking, weekly analysis)
 │   ├── gemini.ts       # Gemini AI chat and image analysis
 │   ├── medical.ts      # Medical document analysis and medication scheduling
 │   ├── audio.ts        # Audio processing and speech synthesis
 │   ├── chatHistory.ts  # Chat history storage and retrieval
-│   └── improvementTracking.ts  # Daily/monthly improvement tracking
+│   ├── improvementTracking.ts  # Daily/monthly improvement tracking
+│   └── weeklyAnalysis.ts  # AI-powered weekly and monthly report generation
 ├── shared/             # Database schema (Drizzle ORM)
-│   └── schema.ts       # Medical reports, prescriptions, medications, schedules, chat messages, improvement records
+│   └── schema.ts       # Medical reports, prescriptions, medications, schedules, chat messages, improvement records, weekly/monthly reports
 ├── server/             # Server utilities
 │   └── storage.ts      # Database connection (PostgreSQL)
 ├── utils/              # Helper utilities
@@ -49,6 +50,17 @@ Kindred is an AI-powered companion app that uses Google's Gemini API to provide 
    - Recent insights cards with latest scores
    - Date picker to backdate missed entries
    - Color-coded visualizations (purple, blue, green, pink)
+   - **AI Weekly Insights**: AI-powered weekly reports analyzing improvement data AND chat conversations
+     * Generate comprehensive wellness reports with Gemini AI
+     * Emotional, mental, physical, and medical summaries
+     * Conversation insights from chat history
+     * Personalized recommendations and action items
+     * View past weekly reports
+   - **Monthly Status Reports**: AI-powered monthly aggregation and trend analysis
+     * Combines multiple weekly reports into monthly overview
+     * Identifies patterns and achievements
+     * Highlights areas for growth
+     * Shows weekly report count and trends
    - Client-side data persistence via localStorage
 3. **Visual Assistant**: Camera-based image analysis with simplified, structured responses:
    - What is it? (Identification)
@@ -152,6 +164,22 @@ This project is configured for Replit's autoscale deployment:
     * Color-coded visualizations (purple, blue, green, pink)
   - Added Dashboard navigation item to sidebar with chart icon
   - Client-side data persistence using localStorage
+- **Added AI-Powered Weekly & Monthly Analysis Reports**:
+  - Created weekly_reports and monthly_reports tables in PostgreSQL database schema
+  - Implemented weeklyAnalysis service that uses Gemini AI to analyze both improvement data AND chat conversation history
+  - Weekly reports include:
+    * Emotional, mental, physical, and medical dimension summaries
+    * Overall wellness summary with holistic patterns
+    * Conversation insights from chat history
+    * Personalized recommendations for the upcoming week
+    * Specific, actionable items tailored to user's journey
+  - Monthly reports aggregate weekly data to show:
+    * Long-term trends and patterns across all dimensions
+    * Achievements and areas for growth
+    * Monthly overview with weekly report count
+  - Integrated into Creative Dashboard with generate report buttons and collapsible views
+  - localStorage persistence for all reports
+  - Fixed Gemini API response handling using result.response.text() for reliable AI analysis
 
 ## User Preferences
 - None specified yet
