@@ -69,6 +69,9 @@ This project is configured for Replit's autoscale deployment:
   - Text responses now display immediately before audio generation
   - Loading indicator clears as soon as text is available
   - Voice mode automatically continues listening after AI speaks for fluent conversations
+  - Eliminated lag between text and audio by making speech generation non-blocking
+  - Audio generation starts immediately in the background while text is displayed
+  - Speech plays as soon as it's ready without blocking the UI
 
 ## User Preferences
 - None specified yet
