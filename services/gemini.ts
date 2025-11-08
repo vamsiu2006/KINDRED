@@ -1,4 +1,4 @@
-import { GoogleGenAI, Modality } from "@google/genai";
+import { GoogleGenAI } from "@google/genai";
 import { Message } from "../types";
 
 const API_KEY = process.env.API_KEY;
@@ -11,33 +11,6 @@ if (!API_KEY) {
 const ai = new GoogleGenAI({ apiKey: API_KEY! });
 
 const getVisionModel = () => ai.models;
-
-export type ToneStyle = 'soothing' | 'cheerful' | 'neutral';
-
-export const analyzeSentiment = async (text: string): Promise<ToneStyle> => {
-    try {
-        const systemInstruction = `Analyze the sentiment of the user's text. Classify it as one of three categories: 'soothing' (if the user seems sad, anxious, or distressed), 'cheerful' (if the user seems happy, excited, or positive), or 'neutral' (for all other cases). Respond with ONLY one of these three words.`;
-        
-        const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
-            contents: [{ role: 'user', parts: [{text}] }],
-            config: {
-                systemInstruction,
-                temperature: 0, // Be deterministic
-            },
-        });
-
-        const classification = response.text.trim().toLowerCase();
-        if (classification === 'soothing' || classification === 'cheerful' || classification === 'neutral') {
-            return classification as ToneStyle;
-        }
-        return 'neutral'; // Default case
-    } catch (error) {
-        console.error("Error analyzing sentiment:", error);
-        return 'neutral'; // Default to neutral on error
-    }
-};
-
 
 export const generateChatResponse = async (
   userName: string,
@@ -73,36 +46,6 @@ export const generateChatResponse = async (
   } catch (error) {
     console.error("Error generating chat response:", error);
     return "I'm having a little trouble connecting right now. Please try again in a moment.";
-  }
-};
-
-export const generateSpeech = async (text: string, voiceName: string, toneStyle: ToneStyle): Promise<string | null> => {
-  try {
-    const startTime = performance.now();
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash-preview-tts",
-      contents: [{ parts: [{ text }] }],
-      config: {
-        responseModalities: [Modality.AUDIO],
-        speechConfig: {
-            voiceConfig: {
-              prebuiltVoiceConfig: { voiceName: voiceName },
-            },
-        },
-      },
-    });
-    const endTime = performance.now();
-    const duration = (endTime - startTime) / 1000;
-    console.log(`TTS generation took ${duration.toFixed(2)}s for ${text.length} characters`);
-
-    const base64Audio = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
-    if (base64Audio) {
-      return base64Audio;
-    }
-    return null;
-  } catch (error) {
-    console.error("Error generating speech:", error);
-    return null;
   }
 };
 

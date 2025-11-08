@@ -1,10 +1,24 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import LoadingSpinner from '../ui/LoadingSpinner';
-import { analyzeSentiment } from '../../services/gemini';
 
 interface SignLanguageModeProps {
   onClose: () => void;
 }
+
+type SentimentType = 'cheerful' | 'soothing' | 'neutral';
+
+const quickSentimentAnalysis = (text: string): SentimentType => {
+  const lowerText = text.toLowerCase();
+  const cheerfulWords = ['happy', 'great', 'wonderful', 'awesome', 'love', 'thank', 'thanks', 'yay', 'excited'];
+  const soothingWords = ['sad', 'sorry', 'worried', 'anxious', 'help', 'scared', 'upset', 'hurt'];
+  
+  const hasCheerful = cheerfulWords.some(word => lowerText.includes(word));
+  const hasSoothing = soothingWords.some(word => lowerText.includes(word));
+  
+  if (hasCheerful) return 'cheerful';
+  if (hasSoothing) return 'soothing';
+  return 'neutral';
+};
 
 const SignLanguageMode: React.FC<SignLanguageModeProps> = ({ onClose }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -56,7 +70,7 @@ const SignLanguageMode: React.FC<SignLanguageModeProps> = ({ onClose }) => {
     setShowVideo(false);
 
     try {
-        const sentiment = await analyzeSentiment(textInput);
+        const sentiment = quickSentimentAnalysis(textInput);
         let selectedVideo = '';
         switch (sentiment) {
             case 'cheerful':
@@ -78,7 +92,7 @@ const SignLanguageMode: React.FC<SignLanguageModeProps> = ({ onClose }) => {
         setTimeout(() => {
             setIsGenerating(false);
             setShowVideo(true);
-        }, 1500);
+        }, 500);
 
     } catch (error) {
         console.error("Failed to analyze sentiment for sign language:", error);
