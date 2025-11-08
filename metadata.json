@@ -1,0 +1,8 @@
+{
+  "name": "KINDRED AI Companion",
+  "description": "An AI-powered companion app designed to provide empathetic support, foster inclusivity, and enhance accessibility through multi-modal conversations, visual assistance, and translation services.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
