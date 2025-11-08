@@ -78,12 +78,10 @@ export const generateChatResponse = async (
 
 export const generateSpeech = async (text: string, voiceName: string, toneStyle: ToneStyle): Promise<string | null> => {
   try {
-    // Prepend the tone instruction to the text for the TTS model
-    const textWithTone = `(In a ${toneStyle} and friendly tone) ${text}`;
-
+    const startTime = performance.now();
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash-preview-tts",
-      contents: [{ parts: [{ text: textWithTone }] }],
+      contents: [{ parts: [{ text }] }],
       config: {
         responseModalities: [Modality.AUDIO],
         speechConfig: {
@@ -93,6 +91,9 @@ export const generateSpeech = async (text: string, voiceName: string, toneStyle:
         },
       },
     });
+    const endTime = performance.now();
+    const duration = (endTime - startTime) / 1000;
+    console.log(`TTS generation took ${duration.toFixed(2)}s for ${text.length} characters`);
 
     const base64Audio = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
     if (base64Audio) {
