@@ -60,10 +60,15 @@ This project is configured for Replit's autoscale deployment:
 
 ## Recent Changes (November 8, 2025)
 - Configured project for Replit environment
-- Updated Vite config to use port 5000 for Replit compatibility
+- Updated Vite config to use port 5000 for Replit compatibility and added `allowedHosts: true` for proxy support
 - Added HMR client port configuration for proper hot reload
 - Set up workflow for development server
 - Configured deployment settings for production
+- Optimized conversation flow for immediate audio responses:
+  - Parallelized sentiment analysis and chat response generation to reduce latency
+  - Text responses now display immediately before audio generation
+  - Loading indicator clears as soon as text is available
+  - Voice mode automatically continues listening after AI speaks for fluent conversations
 
 ## User Preferences
 - None specified yet
