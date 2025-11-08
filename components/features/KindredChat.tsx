@@ -3,6 +3,7 @@ import { User, Message, Language } from '../../types';
 import { useSpeechRecognition } from '../../hooks/useSpeechRecognition';
 import { generateChatResponse, analyzeImage } from '../../services/gemini';
 import { speakTextInstantly } from '../../services/audio';
+import { saveChatMessage } from '../../services/chatHistory';
 import { fileToBase64 } from '../../utils/helpers';
 import { SUPPORTED_LANGUAGES, ICONS } from '../../constants';
 import LoadingSpinner from '../ui/LoadingSpinner';
@@ -58,8 +59,13 @@ const KindredChat: React.FC<KindredChatProps> = ({ user, onUserOnboarded }) => {
           ...(image && { image }),
       };
       setMessages(prev => [...prev, newMessage]);
+      
+      saveChatMessage(user.name, sender === 'user' ? 'user' : 'kindred', text).catch(err => {
+        console.error('Failed to save chat message to database:', err);
+      });
+      
       return newMessage;
-  }, []);
+  }, [user.name]);
 
   const speakText = useCallback(async (text: string, tone: 'soothing' | 'cheerful' | 'neutral' = 'neutral') => {
     try {

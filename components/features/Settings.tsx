@@ -2,6 +2,8 @@ import React, { useState, FormEvent, useEffect } from 'react';
 import { User } from '../../types';
 import { SUPPORTED_LANGUAGES, SUPPORTED_VOICES, ICONS } from '../../constants';
 import LoadingSpinner from '../ui/LoadingSpinner';
+import ChatHistory from './ChatHistory';
+import { deleteChatHistory } from '../../services/chatHistory';
 
 interface SettingsProps {
   user: User;
@@ -29,6 +31,9 @@ const Settings: React.FC<SettingsProps> = ({ user, onUpdateUser, onChangePasswor
 
   // Data Management state
   const [clearSuccess, setClearSuccess] = useState('');
+  
+  // Chat History state
+  const [showChatHistory, setShowChatHistory] = useState(false);
 
   useEffect(() => {
       setName(user.name);
@@ -103,7 +108,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onUpdateUser, onChangePasswor
     }, 500);
   };
 
-  const handleClearHistory = () => {
+  const handleClearHistory = async () => {
     setClearSuccess('');
     const isConfirmed = window.confirm(
         "Are you sure you want to permanently delete your chat history? This action cannot be undone."
@@ -112,10 +117,14 @@ const Settings: React.FC<SettingsProps> = ({ user, onUpdateUser, onChangePasswor
         try {
             const chatHistoryKey = `kindred_chat_history_${user.name}`;
             localStorage.removeItem(chatHistoryKey);
+            
+            await deleteChatHistory(user.name);
+            
+            setShowChatHistory(false);
+            
             setClearSuccess("Chat history has been successfully cleared. The chat will be reset when you return to it.");
         } catch (error) {
             console.error("Failed to clear chat history:", error);
-            // In a real app, you might show an error toast here
         }
     }
   };
@@ -198,6 +207,29 @@ const Settings: React.FC<SettingsProps> = ({ user, onUpdateUser, onChangePasswor
             </button>
           </div>
         </form>
+      </div>
+
+       {/* Chat History */}
+       <div className="p-4 sm:p-6 lg:p-8 bg-black/20 backdrop-blur-lg rounded-2xl shadow-2xl shadow-black/40 border border-blue-500/20">
+        <h2 className="text-3xl font-bold text-center mb-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
+          Chat History
+        </h2>
+        <p className="text-center text-gray-400 mb-8">View your past conversations with Kindred.</p>
+        
+        <div className="mb-6">
+          <button 
+            onClick={() => setShowChatHistory(!showChatHistory)}
+            className="w-full flex justify-center items-center gap-2 py-3 px-4 rounded-lg text-white font-semibold bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 transition-all"
+          >
+            {showChatHistory ? '📖 Hide Chat History' : '📚 View Chat History (Past 30 Days)'}
+          </button>
+        </div>
+        
+        {showChatHistory && (
+          <div className="mt-6">
+            <ChatHistory userId={user.name} />
+          </div>
+        )}
       </div>
 
        {/* Data Management */}

@@ -56,3 +56,11 @@ export const safetyRecommendations = pgTable('safety_recommendations', {
   category: text('category').notNull(), // 'diet', 'activity', 'medication', 'lifestyle'
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
+
+export const chatMessages = pgTable('chat_messages', {
+  id: serial('id').primaryKey(),
+  userId: text('user_id').notNull(),
+  sender: text('sender').notNull(), // 'user' or 'kindred'
+  message: text('message').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
