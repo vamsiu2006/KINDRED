@@ -561,40 +561,66 @@ export const CreativeDashboard: React.FC = () => {
           )}
         </div>
 
+        {/* Recent Insights - Therapeutic Glassmorphism Design */}
         {dailyRecords.length > 0 && (
-          <div className="mt-6 bg-white rounded-2xl shadow-xl p-6">
-            <h3 className="text-xl font-semibold mb-4 text-gray-800">Recent Insights</h3>
+          <div className="glass-card p-6 sm:p-8 border-purple-500/30">
+            <h3 className="text-2xl sm:text-3xl font-bold gradient-text mb-6" style={{
+              background: 'linear-gradient(135deg, #a855f7, #ec4899)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent'
+            }}>✨ Recent Insights</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {(() => {
                 const latest = dailyRecords[dailyRecords.length - 1];
                 return (
                   <>
-                    <div className="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-500">
-                      <div className="text-sm text-purple-600 font-medium">Emotional</div>
-                      <div className="text-3xl font-bold text-purple-700">{latest.emotionalScore}/10</div>
+                    <div className="glass-card p-5 border-l-4 border-purple-500/50 hover:border-purple-500 transition-all">
+                      <div className="text-base font-bold text-purple-300 mb-2">😊 Emotional</div>
+                      <div className="text-4xl font-bold text-transparent bg-clip-text mb-2" style={{
+                        background: 'linear-gradient(135deg, #a855f7, #d946ef)',
+                        backgroundClip: 'text',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent'
+                      }}>{latest.emotionalScore}/10</div>
                       {latest.emotionalNotes && (
-                        <div className="text-xs text-gray-600 mt-2">{latest.emotionalNotes}</div>
+                        <div className="text-sm text-gray-300 mt-2 leading-relaxed">{latest.emotionalNotes}</div>
                       )}
                     </div>
-                    <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
-                      <div className="text-sm text-blue-600 font-medium">Mental</div>
-                      <div className="text-3xl font-bold text-blue-700">{latest.mentalScore}/10</div>
+                    <div className="glass-card p-5 border-l-4 border-blue-500/50 hover:border-blue-500 transition-all">
+                      <div className="text-base font-bold text-blue-300 mb-2">🧠 Mental</div>
+                      <div className="text-4xl font-bold text-transparent bg-clip-text mb-2" style={{
+                        background: 'linear-gradient(135deg, #3b82f6, #60a5fa)',
+                        backgroundClip: 'text',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent'
+                      }}>{latest.mentalScore}/10</div>
                       {latest.mentalNotes && (
-                        <div className="text-xs text-gray-600 mt-2">{latest.mentalNotes}</div>
+                        <div className="text-sm text-gray-300 mt-2 leading-relaxed">{latest.mentalNotes}</div>
                       )}
                     </div>
-                    <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-500">
-                      <div className="text-sm text-green-600 font-medium">Physical</div>
-                      <div className="text-3xl font-bold text-green-700">{latest.physicalScore}/10</div>
+                    <div className="glass-card p-5 border-l-4 border-green-500/50 hover:border-green-500 transition-all">
+                      <div className="text-base font-bold text-green-300 mb-2">💪 Physical</div>
+                      <div className="text-4xl font-bold text-transparent bg-clip-text mb-2" style={{
+                        background: 'linear-gradient(135deg, #22c55e, #4ade80)',
+                        backgroundClip: 'text',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent'
+                      }}>{latest.physicalScore}/10</div>
                       {latest.physicalNotes && (
-                        <div className="text-xs text-gray-600 mt-2">{latest.physicalNotes}</div>
+                        <div className="text-sm text-gray-300 mt-2 leading-relaxed">{latest.physicalNotes}</div>
                       )}
                     </div>
-                    <div className="bg-pink-50 p-4 rounded-lg border-l-4 border-pink-500">
-                      <div className="text-sm text-pink-600 font-medium">Medical</div>
-                      <div className="text-3xl font-bold text-pink-700">{latest.medicalScore}/10</div>
+                    <div className="glass-card p-5 border-l-4 border-pink-500/50 hover:border-pink-500 transition-all">
+                      <div className="text-base font-bold text-pink-300 mb-2">⚕️ Medical</div>
+                      <div className="text-4xl font-bold text-transparent bg-clip-text mb-2" style={{
+                        background: 'linear-gradient(135deg, #ec4899, #f472b6)',
+                        backgroundClip: 'text',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent'
+                      }}>{latest.medicalScore}/10</div>
                       {latest.medicalNotes && (
-                        <div className="text-xs text-gray-600 mt-2">{latest.medicalNotes}</div>
+                        <div className="text-sm text-gray-300 mt-2 leading-relaxed">{latest.medicalNotes}</div>
                       )}
                     </div>
                   </>
@@ -604,81 +630,112 @@ export const CreativeDashboard: React.FC = () => {
           </div>
         )}
 
-        <div className="mt-6 bg-white rounded-2xl shadow-xl p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl font-semibold text-gray-800">🤖 AI Weekly Insights</h3>
-            <div className="flex gap-3">
+        {/* AI Weekly Insights - Therapeutic Glassmorphism Design */}
+        <div className="glass-card p-6 sm:p-8 border-cyan-500/30">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+            <div>
+              <h3 className="text-2xl sm:text-3xl font-bold gradient-text mb-2" style={{
+                background: 'linear-gradient(135deg, #00d9ff, #3b82f6)',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent'
+              }}>
+                🤖 AI Weekly Insights
+              </h3>
+              <p className="text-cyan-300 text-sm">Get personalized wellness analysis from your week</p>
+            </div>
+            <div className="flex flex-wrap gap-3">
               <button
                 onClick={handleGenerateWeeklyReport}
                 disabled={generatingReport}
-                className="px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-lg font-medium hover:from-indigo-600 hover:to-purple-600 transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-3 text-lg rounded-xl font-medium transition-all shadow-lg hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{
+                  background: generatingReport
+                    ? 'linear-gradient(135deg, #6b7280, #9ca3af)'
+                    : 'linear-gradient(135deg, #00d9ff, #3b82f6)'
+                }}
               >
-                {generatingReport ? 'Generating...' : 'Generate Weekly Report'}
+                {generatingReport ? '✨ Generating...' : '✨ Generate Weekly Report'}
               </button>
               <button
                 onClick={() => setShowWeeklyInsights(!showWeeklyInsights)}
-                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition-all"
+                className="px-6 py-3 text-lg rounded-xl font-medium transition-all shadow-md hover:scale-105 glass-card border-cyan-500/30 text-cyan-300"
               >
-                {showWeeklyInsights ? 'Hide' : 'Show'} Reports
+                {showWeeklyInsights ? '👁️ Hide Reports' : '👁️ Show Reports'}
               </button>
             </div>
           </div>
 
           {showWeeklyInsights && weeklyReports.length > 0 && (
-            <div className="space-y-4 mt-4">
+            <div className="space-y-6 mt-6">
               {weeklyReports.slice(0, 3).map((report) => (
-                <div key={report.id} className="border border-gray-200 rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <h4 className="text-lg font-semibold text-gray-800">
-                      Week of {new Date(report.weekStartDate).toLocaleDateString()} - {new Date(report.weekEndDate).toLocaleDateString()}
+                <div key={report.id} className="glass-card p-6 border-cyan-500/20 hover:border-cyan-500/40 transition-all">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
+                    <h4 className="text-xl font-bold text-cyan-300">
+                      📅 Week of {new Date(report.weekStartDate).toLocaleDateString()} - {new Date(report.weekEndDate).toLocaleDateString()}
                     </h4>
-                    <div className="flex gap-2">
-                      <span className="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">Emotional: {report.emotionalAverage}/10</span>
-                      <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Mental: {report.mentalAverage}/10</span>
-                      <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">Physical: {report.physicalAverage}/10</span>
-                      <span className="px-2 py-1 bg-pink-100 text-pink-700 text-xs rounded">Medical: {report.medicalAverage}/10</span>
+                    <div className="flex flex-wrap gap-2">
+                      <span className="px-3 py-2 glass-card border-purple-500/30 text-purple-300 text-sm font-medium rounded-lg">
+                        😊 {report.emotionalAverage}/10
+                      </span>
+                      <span className="px-3 py-2 glass-card border-blue-500/30 text-blue-300 text-sm font-medium rounded-lg">
+                        🧠 {report.mentalAverage}/10
+                      </span>
+                      <span className="px-3 py-2 glass-card border-green-500/30 text-green-300 text-sm font-medium rounded-lg">
+                        💪 {report.physicalAverage}/10
+                      </span>
+                      <span className="px-3 py-2 glass-card border-pink-500/30 text-pink-300 text-sm font-medium rounded-lg">
+                        ⚕️ {report.medicalAverage}/10
+                      </span>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div className="bg-purple-50 p-3 rounded">
-                      <p className="text-sm font-medium text-purple-800 mb-1">😊 Emotional Summary</p>
-                      <p className="text-sm text-gray-700">{report.emotionalSummary}</p>
+                    <div className="glass-card p-4 border-l-4 border-purple-500/50">
+                      <p className="text-base font-bold text-purple-300 mb-2">😊 Emotional Summary</p>
+                      <p className="text-sm text-gray-300 leading-relaxed">{report.emotionalSummary}</p>
                     </div>
-                    <div className="bg-blue-50 p-3 rounded">
-                      <p className="text-sm font-medium text-blue-800 mb-1">🧠 Mental Summary</p>
-                      <p className="text-sm text-gray-700">{report.mentalSummary}</p>
+                    <div className="glass-card p-4 border-l-4 border-blue-500/50">
+                      <p className="text-base font-bold text-blue-300 mb-2">🧠 Mental Summary</p>
+                      <p className="text-sm text-gray-300 leading-relaxed">{report.mentalSummary}</p>
                     </div>
-                    <div className="bg-green-50 p-3 rounded">
-                      <p className="text-sm font-medium text-green-800 mb-1">💪 Physical Summary</p>
-                      <p className="text-sm text-gray-700">{report.physicalSummary}</p>
+                    <div className="glass-card p-4 border-l-4 border-green-500/50">
+                      <p className="text-base font-bold text-green-300 mb-2">💪 Physical Summary</p>
+                      <p className="text-sm text-gray-300 leading-relaxed">{report.physicalSummary}</p>
                     </div>
-                    <div className="bg-pink-50 p-3 rounded">
-                      <p className="text-sm font-medium text-pink-800 mb-1">🏥 Medical Summary</p>
-                      <p className="text-sm text-gray-700">{report.medicalSummary}</p>
+                    <div className="glass-card p-4 border-l-4 border-pink-500/50">
+                      <p className="text-base font-bold text-pink-300 mb-2">🏥 Medical Summary</p>
+                      <p className="text-sm text-gray-300 leading-relaxed">{report.medicalSummary}</p>
                     </div>
                   </div>
 
-                  <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-lg mb-4">
-                    <p className="text-sm font-medium text-gray-800 mb-2">📊 Overall Summary</p>
-                    <p className="text-sm text-gray-700">{report.overallSummary}</p>
+                  <div className="glass-card p-5 mb-4 border-l-4" style={{
+                    borderImage: 'linear-gradient(135deg, #a855f7, #ec4899) 1'
+                  }}>
+                    <p className="text-lg font-bold text-transparent bg-clip-text mb-3" style={{
+                      background: 'linear-gradient(135deg, #a855f7, #ec4899)',
+                      backgroundClip: 'text',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent'
+                    }}>📊 Overall Summary</p>
+                    <p className="text-base text-gray-200 leading-relaxed">{report.overallSummary}</p>
                   </div>
 
                   {report.conversationInsights && (
-                    <div className="bg-indigo-50 p-4 rounded-lg mb-4">
-                      <p className="text-sm font-medium text-indigo-800 mb-2">💬 Conversation Insights</p>
-                      <p className="text-sm text-gray-700">{report.conversationInsights}</p>
+                    <div className="glass-card p-5 mb-4 border-l-4 border-cyan-500/50">
+                      <p className="text-lg font-bold text-cyan-300 mb-3">💬 Conversation Insights</p>
+                      <p className="text-base text-gray-200 leading-relaxed">{report.conversationInsights}</p>
                     </div>
                   )}
 
-                  <div className="bg-yellow-50 p-4 rounded-lg mb-4">
-                    <p className="text-sm font-medium text-yellow-800 mb-2">💡 Recommendations for Next Week</p>
-                    <div className="text-sm text-gray-700 whitespace-pre-line">{report.recommendations}</div>
+                  <div className="glass-card p-5 mb-4 border-l-4 border-yellow-500/50">
+                    <p className="text-lg font-bold text-yellow-300 mb-3">💡 Recommendations for Next Week</p>
+                    <div className="text-base text-gray-200 leading-relaxed whitespace-pre-line">{report.recommendations}</div>
                   </div>
 
-                  <div className="bg-green-50 p-4 rounded-lg">
-                    <p className="text-sm font-medium text-green-800 mb-2">✅ Action Items</p>
-                    <div className="text-sm text-gray-700 whitespace-pre-line">{report.actionItems}</div>
+                  <div className="glass-card p-5 border-l-4 border-emerald-500/50">
+                    <p className="text-lg font-bold text-emerald-300 mb-3">✅ Action Items</p>
+                    <div className="text-base text-gray-200 leading-relaxed whitespace-pre-line">{report.actionItems}</div>
                   </div>
                 </div>
               ))}
@@ -686,89 +743,121 @@ export const CreativeDashboard: React.FC = () => {
           )}
 
           {showWeeklyInsights && weeklyReports.length === 0 && (
-            <div className="text-center text-gray-500 py-8">
-              <p className="text-lg mb-2">No weekly reports yet</p>
-              <p className="text-sm">Generate your first weekly report to get AI-powered insights!</p>
+            <div className="text-center py-12">
+              <div className="text-6xl mb-4">📊</div>
+              <p className="text-xl text-cyan-300 font-semibold mb-2">No weekly reports yet</p>
+              <p className="text-base text-gray-400">Generate your first weekly report to get AI-powered insights and personalized recommendations! 💫</p>
             </div>
           )}
         </div>
 
-        <div className="mt-6 bg-white rounded-2xl shadow-xl p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl font-semibold text-gray-800">📅 Monthly Status Reports</h3>
-            <div className="flex gap-3">
+        {/* Monthly Status Reports - Therapeutic Glassmorphism Design */}
+        <div className="glass-card p-6 sm:p-8 border-emerald-500/30">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+            <div>
+              <h3 className="text-2xl sm:text-3xl font-bold gradient-text mb-2" style={{
+                background: 'linear-gradient(135deg, #00ff88, #10b981)',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent'
+              }}>
+                📅 Monthly Status Reports
+              </h3>
+              <p className="text-emerald-300 text-sm">Track your monthly journey and celebrate achievements</p>
+            </div>
+            <div className="flex flex-wrap gap-3">
               <button
                 onClick={handleGenerateMonthlyReport}
                 disabled={generatingReport}
-                className="px-4 py-2 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-lg font-medium hover:from-teal-600 hover:to-cyan-600 transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-3 text-lg rounded-xl font-medium transition-all shadow-lg hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{
+                  background: generatingReport
+                    ? 'linear-gradient(135deg, #6b7280, #9ca3af)'
+                    : 'linear-gradient(135deg, #00ff88, #10b981)'
+                }}
               >
-                {generatingReport ? 'Generating...' : 'Generate Monthly Report'}
+                {generatingReport ? '✨ Generating...' : '✨ Generate Monthly Report'}
               </button>
               <button
                 onClick={() => setShowMonthlyReports(!showMonthlyReports)}
-                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition-all"
+                className="px-6 py-3 text-lg rounded-xl font-medium transition-all shadow-md hover:scale-105 glass-card border-emerald-500/30 text-emerald-300"
               >
-                {showMonthlyReports ? 'Hide' : 'Show'} Reports
+                {showMonthlyReports ? '👁️ Hide Reports' : '👁️ Show Reports'}
               </button>
             </div>
           </div>
 
           {showMonthlyReports && monthlyReportsList.length > 0 && (
-            <div className="space-y-4 mt-4">
+            <div className="space-y-6 mt-6">
               {monthlyReportsList.slice(0, 3).map((report) => (
-                <div key={report.id} className="border border-gray-200 rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <h4 className="text-lg font-semibold text-gray-800">
-                      {new Date(report.month + '-01').toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                <div key={report.id} className="glass-card p-6 border-emerald-500/20 hover:border-emerald-500/40 transition-all">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
+                    <h4 className="text-xl font-bold text-emerald-300">
+                      🗓️ {new Date(report.month + '-01').toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                     </h4>
-                    <div className="flex gap-2">
-                      <span className="px-2 py-1 bg-purple-100 text-purple-700 text-xs rounded">Emotional: {report.emotionalAverage}/10</span>
-                      <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">Mental: {report.mentalAverage}/10</span>
-                      <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">Physical: {report.physicalAverage}/10</span>
-                      <span className="px-2 py-1 bg-pink-100 text-pink-700 text-xs rounded">Medical: {report.medicalAverage}/10</span>
+                    <div className="flex flex-wrap gap-2">
+                      <span className="px-3 py-2 glass-card border-purple-500/30 text-purple-300 text-sm font-medium rounded-lg">
+                        😊 {report.emotionalAverage}/10
+                      </span>
+                      <span className="px-3 py-2 glass-card border-blue-500/30 text-blue-300 text-sm font-medium rounded-lg">
+                        🧠 {report.mentalAverage}/10
+                      </span>
+                      <span className="px-3 py-2 glass-card border-green-500/30 text-green-300 text-sm font-medium rounded-lg">
+                        💪 {report.physicalAverage}/10
+                      </span>
+                      <span className="px-3 py-2 glass-card border-pink-500/30 text-pink-300 text-sm font-medium rounded-lg">
+                        ⚕️ {report.medicalAverage}/10
+                      </span>
                     </div>
                   </div>
 
-                  <div className="bg-gradient-to-r from-teal-50 to-cyan-50 p-4 rounded-lg mb-4">
-                    <p className="text-sm font-medium text-gray-800 mb-2">📊 Monthly Overview ({report.weeklyReportsCount} weeks tracked)</p>
-                    <p className="text-sm text-gray-700">{report.overallSummary}</p>
+                  <div className="glass-card p-5 mb-4 border-l-4" style={{
+                    borderImage: 'linear-gradient(135deg, #00ff88, #00d9ff) 1'
+                  }}>
+                    <p className="text-lg font-bold text-transparent bg-clip-text mb-3" style={{
+                      background: 'linear-gradient(135deg, #00ff88, #00d9ff)',
+                      backgroundClip: 'text',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent'
+                    }}>📊 Monthly Overview ({report.weeklyReportsCount} weeks tracked)</p>
+                    <p className="text-base text-gray-200 leading-relaxed">{report.overallSummary}</p>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div className="bg-purple-50 p-3 rounded">
-                      <p className="text-sm font-medium text-purple-800 mb-1">Emotional Journey</p>
-                      <p className="text-sm text-gray-700">{report.emotionalSummary}</p>
+                    <div className="glass-card p-4 border-l-4 border-purple-500/50">
+                      <p className="text-base font-bold text-purple-300 mb-2">😊 Emotional Journey</p>
+                      <p className="text-sm text-gray-300 leading-relaxed">{report.emotionalSummary}</p>
                     </div>
-                    <div className="bg-blue-50 p-3 rounded">
-                      <p className="text-sm font-medium text-blue-800 mb-1">Mental Patterns</p>
-                      <p className="text-sm text-gray-700">{report.mentalSummary}</p>
+                    <div className="glass-card p-4 border-l-4 border-blue-500/50">
+                      <p className="text-base font-bold text-blue-300 mb-2">🧠 Mental Patterns</p>
+                      <p className="text-sm text-gray-300 leading-relaxed">{report.mentalSummary}</p>
                     </div>
-                    <div className="bg-green-50 p-3 rounded">
-                      <p className="text-sm font-medium text-green-800 mb-1">Physical Health</p>
-                      <p className="text-sm text-gray-700">{report.physicalSummary}</p>
+                    <div className="glass-card p-4 border-l-4 border-green-500/50">
+                      <p className="text-base font-bold text-green-300 mb-2">💪 Physical Health</p>
+                      <p className="text-sm text-gray-300 leading-relaxed">{report.physicalSummary}</p>
                     </div>
-                    <div className="bg-pink-50 p-3 rounded">
-                      <p className="text-sm font-medium text-pink-800 mb-1">Medical Progress</p>
-                      <p className="text-sm text-gray-700">{report.medicalSummary}</p>
+                    <div className="glass-card p-4 border-l-4 border-pink-500/50">
+                      <p className="text-base font-bold text-pink-300 mb-2">⚕️ Medical Progress</p>
+                      <p className="text-sm text-gray-300 leading-relaxed">{report.medicalSummary}</p>
                     </div>
                   </div>
 
-                  <div className="bg-blue-50 p-4 rounded-lg mb-4">
-                    <p className="text-sm font-medium text-blue-800 mb-2">📈 Trends</p>
-                    <div className="text-sm text-gray-700 whitespace-pre-line">{report.trends}</div>
+                  <div className="glass-card p-5 mb-4 border-l-4 border-blue-500/50">
+                    <p className="text-lg font-bold text-blue-300 mb-3">📈 Trends</p>
+                    <div className="text-base text-gray-200 leading-relaxed whitespace-pre-line">{report.trends}</div>
                   </div>
 
                   {report.achievements && (
-                    <div className="bg-green-50 p-4 rounded-lg mb-4">
-                      <p className="text-sm font-medium text-green-800 mb-2">🎉 Achievements</p>
-                      <div className="text-sm text-gray-700 whitespace-pre-line">{report.achievements}</div>
+                    <div className="glass-card p-5 mb-4 border-l-4 border-green-500/50">
+                      <p className="text-lg font-bold text-green-300 mb-3">🎉 Achievements - Celebrate Your Wins!</p>
+                      <div className="text-base text-gray-200 leading-relaxed whitespace-pre-line">{report.achievements}</div>
                     </div>
                   )}
 
                   {report.areasForImprovement && (
-                    <div className="bg-yellow-50 p-4 rounded-lg">
-                      <p className="text-sm font-medium text-yellow-800 mb-2">🎯 Areas for Growth</p>
-                      <div className="text-sm text-gray-700 whitespace-pre-line">{report.areasForImprovement}</div>
+                    <div className="glass-card p-5 border-l-4 border-yellow-500/50">
+                      <p className="text-lg font-bold text-yellow-300 mb-3">🎯 Areas for Growth</p>
+                      <div className="text-base text-gray-200 leading-relaxed whitespace-pre-line">{report.areasForImprovement}</div>
                     </div>
                   )}
                 </div>
@@ -777,9 +866,10 @@ export const CreativeDashboard: React.FC = () => {
           )}
 
           {showMonthlyReports && monthlyReportsList.length === 0 && (
-            <div className="text-center text-gray-500 py-8">
-              <p className="text-lg mb-2">No monthly reports yet</p>
-              <p className="text-sm">Generate weekly reports first, then create monthly summaries!</p>
+            <div className="text-center py-12">
+              <div className="text-6xl mb-4">📅</div>
+              <p className="text-xl text-emerald-300 font-semibold mb-2">No monthly reports yet</p>
+              <p className="text-base text-gray-400">Generate weekly reports first, then create monthly summaries to see your overall progress! 🌟</p>
             </div>
           )}
         </div>
