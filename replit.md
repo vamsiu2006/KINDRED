@@ -80,6 +80,11 @@ This project is configured for Replit's autoscale deployment:
   - Restructured responses into 4 clear sections: What is it?, What's it used for?, Side Effects & Risks, What to Avoid
   - Uses simple, everyday language instead of technical jargon
   - Provides practical, concise information focused on user safety and understanding
+- Implemented universal text-to-speech for all AI responses:
+  - Every Kindred response is now read aloud automatically
+  - Includes chat responses, quick replies, error messages, and image analysis results
+  - Speech starts immediately after text appears with zero lag
+  - Removed sentiment analysis from critical path for instant audio playback
 
 ## User Preferences
 - None specified yet
