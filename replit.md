@@ -48,6 +48,17 @@ The application features a "Therapeutic & Accessible UI" with a greenish-red col
 - **Port**: 5000 (configured for Replit's webview)
 
 ## Recent Changes (November 8, 2025 - Latest)
+- **Medical Manager PDF Support**:
+  - Added PDF file upload support for prescriptions and medical reports
+  - File validation now accepts: Images (PNG, JPG, JPEG, WEBP) and PDF files
+  - Dynamic file icon: Shows 📑 for PDFs, 📄 for images
+  - Helpful user guidance: Tip to convert DOCX files to PDF before uploading
+  - Gemini API natively analyzes PDF documents without conversion
+  - Maintained existing image analysis functionality
+  - Clear error messages for unsupported file types
+  - Updated UI text to be more inclusive ("document" vs "image")
+
+## Previous Dashboard Changes (November 8, 2025)
 - **Complete Dashboard Glassmorphism Redesign**:
   - **AI Weekly Insights**: Redesigned with cyan-themed glassmorphism, large gradient buttons (px-6 py-3), glass-card report cards with colorful left borders, gradient text headings, and encouraging empty states with large emojis
   - **Monthly Status Reports**: Redesigned with emerald-themed glassmorphism, large gradient buttons, glass-card report cards, "Celebrate Your Wins!" achievement section, and encouraging empty states
