@@ -161,6 +161,10 @@ const KindredChat: React.FC<KindredChatProps> = ({ user, onUserOnboarded }) => {
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    hasShownIntroduction.current = false;
+  }, [user.name]);
+
+  useEffect(() => {
     if (hasShownIntroduction.current) {
       return;
     }
