@@ -12,6 +12,11 @@ import { eq } from 'drizzle-orm';
 
 dotenv.config();
 
+const sanitizeUser = (user: any) => {
+  const { password, ...sanitized } = user;
+  return sanitized;
+};
+
 const requiredEnvVars = ['DATABASE_URL', 'GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET', 'SESSION_SECRET'];
 const missingEnvVars = requiredEnvVars.filter(varName => !process.env[varName]);
 
@@ -186,7 +191,7 @@ app.post('/auth/signup', async (req, res) => {
       if (err) {
         return res.status(500).json({ error: 'Failed to log in after signup' });
       }
-      res.json({ user: newUser[0], message: 'Account created successfully' });
+      res.json({ user: sanitizeUser(newUser[0]), message: 'Account created successfully' });
     });
   } catch (error) {
     console.error('Signup error:', error);
@@ -232,7 +237,7 @@ app.post('/auth/login', async (req, res) => {
       if (err) {
         return res.status(500).json({ error: 'Failed to log in' });
       }
-      res.json({ user, message: 'Logged in successfully' });
+      res.json({ user: sanitizeUser(user), message: 'Logged in successfully' });
     });
   } catch (error) {
     console.error('Login error:', error);
@@ -242,7 +247,7 @@ app.post('/auth/login', async (req, res) => {
 
 app.get('/api/auth/user', (req, res) => {
   if (req.isAuthenticated()) {
-    res.json({ user: req.user });
+    res.json({ user: sanitizeUser(req.user) });
   } else {
     res.status(401).json({ error: 'Not authenticated' });
   }
@@ -290,7 +295,7 @@ app.put('/api/user/profile', async (req, res) => {
       .where(eq(users.id, user.id))
       .limit(1);
 
-    res.json({ user: updatedUser[0] });
+    res.json({ user: sanitizeUser(updatedUser[0]) });
   } catch (error) {
     console.error('Profile update error:', error);
     res.status(500).json({ error: 'Failed to update profile' });
