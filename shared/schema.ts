@@ -2,9 +2,10 @@ import { pgTable, text, timestamp, serial, integer, date, time, boolean, varchar
 
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
-  googleId: text('google_id').unique().notNull(),
+  googleId: text('google_id').unique(),
   email: text('email').unique().notNull(),
   name: text('name').notNull(),
+  password: text('password'),
   profilePicture: text('profile_picture'),
   languageCode: text('language_code').default('en-US'),
   voiceName: text('voice_name'),
