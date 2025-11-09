@@ -47,12 +47,41 @@ The application features a "Therapeutic & Accessible UI" with a greenish-red col
 - **Run Command**: `npx vite preview --host 0.0.0.0 --port 5000`
 - **Port**: 5000 (configured for Replit's webview)
 
-## Recent Changes (November 8-9, 2025 - Latest)
-- **Emergency Dashboard Implementation**:
+## Recent Changes (November 9, 2025 - Latest)
+- **Location-Based Emergency Contacts Enhancement**:
+  - **Automatic Country Detection**: Two-tier system for detecting user's location
+    * Primary: Browser geolocation API → BigDataCloud reverse geocoding (lat/lon → country code)
+    * Fallback: IP-based country detection via ipapi.co API
+    * Default: US emergency contacts if all detection fails
+  - **10-Country Emergency Database**: Comprehensive emergency contacts for:
+    * 🇺🇸 United States (911, 988, Poison Control)
+    * 🇬🇧 United Kingdom (999, 112, NHS 111, Samaritans)
+    * 🇮🇳 India (112, 108, 102, Mental Health)
+    * 🇦🇺 Australia (000, 112, Lifeline, Healthdirect)
+    * 🇨🇦 Canada (911, 811, 988, Poison Control)
+    * 🇩🇪 Germany (112, 110, 116-117, TelefonSeelsorge)
+    * 🇫🇷 France (112, 15, 17, SOS Suicide)
+    * 🇯🇵 Japan (119, 110, Tokyo Lifeline)
+    * 🇨🇳 China (120, 110, 119, Crisis Hotline)
+    * 🇧🇷 Brazil (192, 190, 193, CVV Helpline)
+  - **Dynamic UI Updates**:
+    * Panic button shows country-specific emergency number
+    * Emergency contact cards update based on detected/selected country
+    * Country flag emoji and name display
+    * Manual country selector dropdown for override
+    * Loading state with "Detecting Your Location..." animation
+  - **Enhanced UX**:
+    * Confirmation dialog shows correct emergency number for selected country
+    * Color-coded cards by service type (ambulance=red, police=blue, hospital=green, hotline=purple)
+    * Graceful error handling with informative messages
+    * Location coordinates displayed when available
+    * Google Maps integration for finding nearby hospitals/ERs
+
+## Previous Emergency Dashboard Changes (November 8-9, 2025)
+- **Initial Emergency Dashboard Implementation**:
   - New Emergency view added to main navigation
-  - Panic button with confirmation dialog for 911 calls
-  - Click-to-call emergency contact cards (911, Ambulance, Poison Control, Mental Health Crisis, Non-Emergency)
-  - Color-coded cards by emergency type (ambulance=red, hospital=green, hotline=purple)
+  - Panic button with confirmation dialog
+  - Click-to-call emergency contact cards
   - Browser geolocation integration for location tracking
   - "Find Nearest Hospitals" and "Find Nearest Emergency Rooms" buttons with Google Maps deep links
   - Emergency tips section with calming guidance
