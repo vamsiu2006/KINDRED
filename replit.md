@@ -26,7 +26,8 @@ The application features a "Therapeutic & Accessible UI" with a greenish-red col
     *   **AI Weekly & Monthly Insights**: Generates AI-powered reports analyzing improvement data and chat conversations, offering summaries, personalized recommendations, and trend analysis.
 3.  **Visual Assistant**: Camera-based image analysis providing simplified, structured responses for identification, uses, side effects/risks, and precautions.
 4.  **Medical Manager**: AI-powered analysis of medical documents (prescriptions, reports) to extract medication schedules. It features a 14-day medication calendar with check-off functionality and safety precaution displays.
-5.  **Settings**: Allows customization of voice, language, and user preferences, including viewing and clearing chat history.
+5.  **Emergency Dashboard**: Provides immediate access to emergency services with click-to-call functionality for 911, ambulance, poison control, mental health crisis hotline (988), and non-emergency services. Features location-based hospital/ER finding, panic button with confirmation dialog, and emergency tips. Uses browser geolocation to help find nearest emergency facilities via Google Maps integration.
+6.  **Settings**: Allows customization of voice, language, and user preferences, including viewing and clearing chat history.
 
 ### System Design Choices
 -   Client-side data persistence for chat history, medical data, improvement records, and reports using `localStorage`.
@@ -46,7 +47,22 @@ The application features a "Therapeutic & Accessible UI" with a greenish-red col
 - **Run Command**: `npx vite preview --host 0.0.0.0 --port 5000`
 - **Port**: 5000 (configured for Replit's webview)
 
-## Recent Changes (November 8, 2025 - Latest)
+## Recent Changes (November 8-9, 2025 - Latest)
+- **Emergency Dashboard Implementation**:
+  - New Emergency view added to main navigation
+  - Panic button with confirmation dialog for 911 calls
+  - Click-to-call emergency contact cards (911, Ambulance, Poison Control, Mental Health Crisis, Non-Emergency)
+  - Color-coded cards by emergency type (ambulance=red, hospital=green, hotline=purple)
+  - Browser geolocation integration for location tracking
+  - "Find Nearest Hospitals" and "Find Nearest Emergency Rooms" buttons with Google Maps deep links
+  - Emergency tips section with calming guidance
+  - Touch-friendly interface with onTouchStart support for mobile devices
+  - Full glassmorphism design matching therapeutic theme
+  - Responsive grid layout (1-3 columns based on screen size)
+  - Emergency icon (warning triangle) added to constants
+  - All emergency numbers use tel: protocol for direct calling
+
+## Previous Sign Language Changes (November 8, 2025)
 - **Sign Language Feature Removal**:
   - Removed sign language button from chat interface
   - Deleted SignLanguageMode.tsx and SignTranslator.tsx components
