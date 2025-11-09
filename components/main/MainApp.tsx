@@ -12,9 +12,11 @@ interface MainAppProps {
   user: User;
   onLogout: () => void;
   onUpdateUser: (updatedData: Partial<User>) => void;
+  onChangePassword: (currentPassword: string, newPassword: string) => { success: boolean, message: string };
+  onUserOnboarded: () => void;
 }
 
-const MainApp: React.FC<MainAppProps> = ({ user, onLogout, onUpdateUser }) => {
+const MainApp: React.FC<MainAppProps> = ({ user, onLogout, onUpdateUser, onChangePassword, onUserOnboarded }) => {
   const [currentView, setCurrentView] = useState<View>(View.Chat);
 
   const renderView = () => {
@@ -26,10 +28,10 @@ const MainApp: React.FC<MainAppProps> = ({ user, onLogout, onUpdateUser }) => {
       case View.Emergency:
         return <Emergency user={user} />;
       case View.Settings:
-        return <Settings user={user} onUpdateUser={onUpdateUser} onLogout={onLogout} />;
+        return <Settings user={user} onUpdateUser={onUpdateUser} onChangePassword={onChangePassword} onLogout={onLogout} />;
       case View.Chat:
       default:
-        return <KindredChat user={user} />;
+        return <KindredChat user={user} onUserOnboarded={onUserOnboarded} />;
     }
   };
 

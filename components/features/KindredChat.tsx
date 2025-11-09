@@ -12,6 +12,7 @@ import CameraCapture from './CameraCapture';
 
 interface KindredChatProps {
   user: User;
+  onUserOnboarded: () => void;
 }
 
 const KindredLogoAvatar = () => (
@@ -26,7 +27,7 @@ const KindredLogoAvatar = () => (
     </div>
 );
 
-const KindredChat: React.FC<KindredChatProps> = ({ user }) => {
+const KindredChat: React.FC<KindredChatProps> = ({ user, onUserOnboarded }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -190,6 +191,7 @@ How are you feeling today?`;
         speakText(introductionText, 'cheerful');
       }, 1000);
       
+      setTimeout(() => onUserOnboarded(), 2000);
       return;
     }
 
@@ -214,7 +216,7 @@ How are you feeling today?`;
           speakText(welcomeMessage.text, 'cheerful');
         }, 500);
     }
-  }, [user.name, chatHistoryKey, addMessage, speakText]);
+  }, [user.name, user.hasBeenOnboarded, chatHistoryKey, onUserOnboarded, addMessage, speakText]);
 
   useEffect(() => {
     if (messages.length > 0) {

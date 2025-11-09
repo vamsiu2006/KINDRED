@@ -1,23 +1,4 @@
-import { pgTable, text, timestamp, serial, integer, date, time, boolean, varchar } from 'drizzle-orm/pg-core';
-
-export const users = pgTable('users', {
-  id: serial('id').primaryKey(),
-  googleId: text('google_id').unique(),
-  email: text('email').unique().notNull(),
-  name: text('name').notNull(),
-  password: text('password'),
-  profilePicture: text('profile_picture'),
-  languageCode: text('language_code').default('en-US'),
-  voiceName: text('voice_name'),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
-});
-
-export const sessions = pgTable('session', {
-  sid: varchar('sid').primaryKey(),
-  sess: text('sess').notNull(),
-  expire: timestamp('expire').notNull(),
-});
+import { pgTable, text, timestamp, serial, integer, date, time, boolean } from 'drizzle-orm/pg-core';
 
 export const medicalReports = pgTable('medical_reports', {
   id: serial('id').primaryKey(),
