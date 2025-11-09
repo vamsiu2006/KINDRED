@@ -21,13 +21,6 @@ const Settings: React.FC<SettingsProps> = ({ user, onUpdateUser, onChangePasswor
   const [profileError, setProfileError] = useState('');
   const [profileSuccess, setProfileSuccess] = useState('');
 
-  // Translation Settings state
-  const [translationEnabled, setTranslationEnabled] = useState(user.translationEnabled || false);
-  const [autoDetectLanguage, setAutoDetectLanguage] = useState(user.autoDetectLanguage || false);
-  const [showOriginalText, setShowOriginalText] = useState(user.showOriginalText || false);
-  const [isSavingTranslation, setIsSavingTranslation] = useState(false);
-  const [translationSuccess, setTranslationSuccess] = useState('');
-
   // Personal Information state
   const [profilePicture, setProfilePicture] = useState(user.profilePicture || '');
   const [phone, setPhone] = useState(user.phone || '');
@@ -60,9 +53,6 @@ const Settings: React.FC<SettingsProps> = ({ user, onUpdateUser, onChangePasswor
       setName(user.name);
       setLanguageCode(user.languageCode);
       setVoiceName(user.voiceName);
-      setTranslationEnabled(user.translationEnabled || false);
-      setAutoDetectLanguage(user.autoDetectLanguage || false);
-      setShowOriginalText(user.showOriginalText || false);
       setProfilePicture(user.profilePicture || '');
       setPhone(user.phone || '');
       setBloodGroup(user.bloodGroup || '');
@@ -102,13 +92,6 @@ const Settings: React.FC<SettingsProps> = ({ user, onUpdateUser, onChangePasswor
     }
   }, [clearSuccess]);
 
-  useEffect(() => {
-    if (translationSuccess) {
-      const timer = setTimeout(() => setTranslationSuccess(''), 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [translationSuccess]);
-
   const handleProfileSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (name.trim().length < 2) {
@@ -123,22 +106,6 @@ const Settings: React.FC<SettingsProps> = ({ user, onUpdateUser, onChangePasswor
       onUpdateUser({ name, languageCode, voiceName });
       setIsSavingProfile(false);
       setProfileSuccess('Your profile has been updated successfully!');
-    }, 500);
-  };
-
-  const handleTranslationSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    setTranslationSuccess('');
-    setIsSavingTranslation(true);
-
-    setTimeout(() => {
-      onUpdateUser({ 
-        translationEnabled, 
-        autoDetectLanguage, 
-        showOriginalText 
-      });
-      setIsSavingTranslation(false);
-      setTranslationSuccess('Translation settings updated successfully!');
     }, 500);
   };
 
@@ -282,96 +249,6 @@ const Settings: React.FC<SettingsProps> = ({ user, onUpdateUser, onChangePasswor
               className={`${buttonClasses} bg-gradient-to-r from-teal-600 to-purple-600 hover:from-teal-700 hover:to-purple-700 shadow-teal-900/40`}>
               {isSavingProfile && <LoadingSpinner />}
               {isSavingProfile ? 'Saving...' : 'Save Profile Changes'}
-            </button>
-          </div>
-        </form>
-      </div>
-
-      {/* Translation Settings */}
-      <div className="p-4 sm:p-6 lg:p-8 bg-black/20 backdrop-blur-lg rounded-2xl shadow-2xl shadow-black/40 border border-purple-500/20">
-        <h2 className="text-3xl font-bold text-center mb-2 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-fuchsia-400">
-          🌐 Translation Settings
-        </h2>
-        <p className="text-center text-gray-400 mb-8">Communicate in any language with AI-powered translation.</p>
-
-        <form onSubmit={handleTranslationSubmit} className="space-y-6">
-          <div className="space-y-4">
-            {/* Enable Translation Toggle */}
-            <div className="flex items-center justify-between p-4 bg-black/20 rounded-lg border border-purple-500/20">
-              <div className="flex-1">
-                <label htmlFor="translationEnabled" className="block text-sm font-semibold text-gray-200">
-                  Enable Translation
-                </label>
-                <p className="text-xs text-gray-400 mt-1">
-                  Automatically translate messages between languages
-                </p>
-              </div>
-              <input
-                id="translationEnabled"
-                type="checkbox"
-                checked={translationEnabled}
-                onChange={(e) => setTranslationEnabled(e.target.checked)}
-                className="w-6 h-6 rounded bg-black/40 border-purple-500/30 text-purple-500 focus:ring-2 focus:ring-purple-500/50"
-              />
-            </div>
-
-            {/* Auto-Detect Language Toggle */}
-            <div className={`flex items-center justify-between p-4 bg-black/20 rounded-lg border border-purple-500/20 transition-opacity ${!translationEnabled ? 'opacity-50' : ''}`}>
-              <div className="flex-1">
-                <label htmlFor="autoDetectLanguage" className="block text-sm font-semibold text-gray-200">
-                  Auto-Detect Language
-                </label>
-                <p className="text-xs text-gray-400 mt-1">
-                  Automatically detect the language of your messages
-                </p>
-              </div>
-              <input
-                id="autoDetectLanguage"
-                type="checkbox"
-                checked={autoDetectLanguage}
-                onChange={(e) => setAutoDetectLanguage(e.target.checked)}
-                disabled={!translationEnabled}
-                className="w-6 h-6 rounded bg-black/40 border-purple-500/30 text-purple-500 focus:ring-2 focus:ring-purple-500/50 disabled:opacity-50"
-              />
-            </div>
-
-            {/* Show Original Text Toggle */}
-            <div className={`flex items-center justify-between p-4 bg-black/20 rounded-lg border border-purple-500/20 transition-opacity ${!translationEnabled ? 'opacity-50' : ''}`}>
-              <div className="flex-1">
-                <label htmlFor="showOriginalText" className="block text-sm font-semibold text-gray-200">
-                  Show Original Text
-                </label>
-                <p className="text-xs text-gray-400 mt-1">
-                  Display both translated and original text in messages
-                </p>
-              </div>
-              <input
-                id="showOriginalText"
-                type="checkbox"
-                checked={showOriginalText}
-                onChange={(e) => setShowOriginalText(e.target.checked)}
-                disabled={!translationEnabled}
-                className="w-6 h-6 rounded bg-black/40 border-purple-500/30 text-purple-500 focus:ring-2 focus:ring-purple-500/50 disabled:opacity-50"
-              />
-            </div>
-          </div>
-
-          <div className="p-4 bg-purple-500/10 rounded-lg border border-purple-500/20">
-            <p className="text-sm text-purple-200">
-              <strong>How it works:</strong> When enabled, KINDRED will automatically detect the language you're speaking/typing and translate messages to your preferred language. Voice responses will also be in the detected language.
-            </p>
-            <p className="text-xs text-purple-300 mt-2">
-              💡 Supports 21+ languages including English, Spanish, French, Hindi, Chinese, Arabic, and more!
-            </p>
-          </div>
-
-          {translationSuccess && <p className="text-green-400 text-sm text-center">{translationSuccess}</p>}
-          
-          <div>
-            <button type="submit" disabled={isSavingTranslation}
-              className={`${buttonClasses} bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-purple-900/40`}>
-              {isSavingTranslation && <LoadingSpinner />}
-              {isSavingTranslation ? 'Saving...' : 'Save Translation Settings'}
             </button>
           </div>
         </form>

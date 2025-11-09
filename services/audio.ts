@@ -135,48 +135,7 @@ const ensureVoicesLoaded = (): Promise<void> => {
   });
 };
 
-export const getBestVoiceForLanguage = (languageCode: string, voicePreference?: string): SpeechSynthesisVoice | null => {
-  const voices = getAvailableVoices();
-  if (voices.length === 0) return null;
-
-  const baseLanguage = languageCode.split('-')[0].toLowerCase();
-  
-  const languageVoices = voices.filter(v => {
-    const voiceLang = v.lang.toLowerCase();
-    return voiceLang.startsWith(languageCode.toLowerCase()) || 
-           voiceLang.startsWith(baseLanguage);
-  });
-
-  if (languageVoices.length === 0) {
-    return voices[0];
-  }
-
-  if (voicePreference && voicePreference !== 'auto') {
-    const femaleIndicators = ['female', 'woman', 'girl', 'samantha', 'victoria', 'karen', 'zira', 'jenny'];
-    const maleIndicators = ['male', 'man', 'alex', 'tom', 'daniel'];
-    
-    const isFemale = voicePreference.includes('female');
-    const preferredVoices = languageVoices.filter(v => {
-      const nameLower = v.name.toLowerCase();
-      if (isFemale) {
-        return femaleIndicators.some(ind => nameLower.includes(ind));
-      } else {
-        return maleIndicators.some(ind => nameLower.includes(ind));
-      }
-    });
-    
-    if (preferredVoices.length > 0) {
-      return preferredVoices[0];
-    }
-  }
-
-  const googleVoices = languageVoices.filter(v => v.name.toLowerCase().includes('google'));
-  if (googleVoices.length > 0) return googleVoices[0];
-
-  return languageVoices[0];
-};
-
-export const speakTextInstantly = async (text: string, voiceName?: string, languageCode?: string): Promise<void> => {
+export const speakTextInstantly = async (text: string, voiceName?: string): Promise<void> => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!('speechSynthesis' in window)) {
@@ -185,40 +144,37 @@ export const speakTextInstantly = async (text: string, voiceName?: string, langu
         return;
       }
 
+      // Wait for voices to be loaded
       await ensureVoicesLoaded();
+
+      // Cancel any ongoing speech
       window.speechSynthesis.cancel();
 
       const utterance = new SpeechSynthesisUtterance(text);
       
-      let selectedVoice: SpeechSynthesisVoice | null = null;
-      
-      if (languageCode) {
-        selectedVoice = getBestVoiceForLanguage(languageCode, voiceName);
-        if (selectedVoice) {
-          utterance.lang = languageCode;
-        }
-      } else {
-        let mappedVoiceName = voiceName;
-        if (voiceName === 'Zephyr' || voiceName === 'Kore' || voiceName === 'Puck' || 
-            voiceName === 'Charon' || voiceName === 'Fenrir' || !voiceName) {
-          mappedVoiceName = 'female-us';
-        }
-        selectedVoice = getBestVoice(mappedVoiceName);
+      // Map old voice names to new ones for backwards compatibility
+      let mappedVoiceName = voiceName;
+      if (voiceName === 'Zephyr' || voiceName === 'Kore' || voiceName === 'Puck' || 
+          voiceName === 'Charon' || voiceName === 'Fenrir' || !voiceName) {
+        mappedVoiceName = 'female-us'; // Default to female US voice
       }
       
+      // Get the best voice based on user preference
+      const selectedVoice = getBestVoice(mappedVoiceName);
       if (selectedVoice) {
         utterance.voice = selectedVoice;
-        console.log('Using voice:', selectedVoice.name, 'for language:', languageCode || 'default');
+        console.log('Using voice:', selectedVoice.name, '(preference:', mappedVoiceName, ')');
       }
       
-      utterance.rate = 0.95;
-      utterance.pitch = 1.05;
-      utterance.volume = 1.0;
+      // Configure speech parameters for natural, fluent speech
+      utterance.rate = 0.95;   // Slightly slower for clarity and naturalness
+      utterance.pitch = 1.05;  // Slightly higher for warmth (works well for female voices)
+      utterance.volume = 1.0;  // Full volume
 
       utterance.onend = () => resolve();
       utterance.onerror = (error) => {
         console.error('Speech synthesis error:', error);
-        resolve();
+        resolve(); // Resolve anyway to not block execution
       };
 
       window.speechSynthesis.speak(utterance);

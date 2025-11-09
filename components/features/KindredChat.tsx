@@ -6,7 +6,6 @@ import { speakTextInstantly } from '../../services/audio';
 import { saveChatMessage } from '../../services/chatHistory';
 import { fileToBase64 } from '../../utils/helpers';
 import { SUPPORTED_LANGUAGES, ICONS } from '../../constants';
-import { detectLanguage, translateText } from '../../services/translation';
 import LoadingSpinner from '../ui/LoadingSpinner';
 import MicButton from '../ui/MicButton';
 import CameraCapture from './CameraCapture';
@@ -45,15 +44,13 @@ const KindredChat: React.FC<KindredChatProps> = ({ user, onUserOnboarded }) => {
   const hasShownIntroduction = useRef(false);
   const lastUserName = useRef(user.name);
 
-  const addMessage = useCallback((text: string, sender: 'user' | 'ai', image?: string, originalText?: string, detectedLanguage?: string) => {
+  const addMessage = useCallback((text: string, sender: 'user' | 'ai', image?: string) => {
       const newMessage: Message = {
           id: `${sender}-${Date.now()}`,
           text,
           sender,
           timestamp: new Date().toISOString(),
           ...(image && { image }),
-          ...(originalText && { originalText }),
-          ...(detectedLanguage && { detectedLanguage }),
       };
       setMessages(prev => [...prev, newMessage]);
       
@@ -64,10 +61,10 @@ const KindredChat: React.FC<KindredChatProps> = ({ user, onUserOnboarded }) => {
       return newMessage;
   }, [user.name]);
 
-  const speakText = useCallback(async (text: string, tone: 'soothing' | 'cheerful' | 'neutral' = 'neutral', speechLanguageCode?: string) => {
+  const speakText = useCallback(async (text: string, tone: 'soothing' | 'cheerful' | 'neutral' = 'neutral') => {
     try {
       setIsSpeaking(true);
-      await speakTextInstantly(text, user.voiceName, speechLanguageCode || language.code);
+      await speakTextInstantly(text, user.voiceName);
     } catch (error) {
       console.error("Failed to speak text:", error);
     } finally {
@@ -76,7 +73,7 @@ const KindredChat: React.FC<KindredChatProps> = ({ user, onUserOnboarded }) => {
         startListening(false);
       }
     }
-  }, [user.voiceName, isVoiceMode, language.code]);
+  }, [user.voiceName, isVoiceMode]);
 
   const handleSendMessage = useCallback(async (messageText: string) => {
     if ((!messageText.trim() && !pendingImage) || isLoading) return;
@@ -90,26 +87,7 @@ const KindredChat: React.FC<KindredChatProps> = ({ user, onUserOnboarded }) => {
     const text = messageText.toLowerCase();
     const visualKeywords = ['see', 'watch', 'seeing', 'visual', 'look at', 'picture', 'image', 'describe this'];
 
-    let userMessageToSend = messageText;
-    let detectedLang: string | undefined;
-    let originalUserText: string | undefined;
-
-    if (user.translationEnabled && user.autoDetectLanguage) {
-      try {
-        const detection = await detectLanguage(messageText);
-        detectedLang = detection.detectedLanguage;
-        
-        if (detection.languageCode !== language.code && detection.confidence > 0.6) {
-          const translation = await translateText(messageText, language.name, language.code);
-          userMessageToSend = translation.translatedText;
-          originalUserText = messageText;
-        }
-      } catch (error) {
-        console.error("Translation detection failed:", error);
-      }
-    }
-
-    addMessage(messageText, 'user', undefined, originalUserText, detectedLang);
+    addMessage(messageText, 'user');
     setInput('');
 
     if (visualKeywords.some(kw => text.includes(kw))) {
@@ -122,25 +100,12 @@ const KindredChat: React.FC<KindredChatProps> = ({ user, onUserOnboarded }) => {
     setIsLoading(true);
 
     try {
-      const aiTextResponse = await generateChatResponse(user.name, userMessageToSend, messages, language.name);
+      const aiTextResponse = await generateChatResponse(user.name, messageText, messages, language.name);
       
-      let aiMessageToDisplay = aiTextResponse;
-      let aiOriginalText: string | undefined;
-
-      if (user.translationEnabled && originalUserText && detectedLang) {
-        try {
-          const aiTranslation = await translateText(aiTextResponse, detectedLang, language.code);
-          aiMessageToDisplay = aiTranslation.translatedText;
-          aiOriginalText = aiTextResponse;
-        } catch (error) {
-          console.error("AI response translation failed:", error);
-        }
-      }
-      
-      addMessage(aiMessageToDisplay, 'ai', undefined, aiOriginalText);
+      addMessage(aiTextResponse, 'ai');
       setIsLoading(false);
 
-      speakText(aiMessageToDisplay, 'cheerful');
+      speakText(aiTextResponse, 'cheerful');
     } catch (error) {
       console.error("Failed to get response from AI", error);
       const errorMsg = "I'm sorry, I'm having trouble connecting right now. Please try again.";
@@ -148,7 +113,7 @@ const KindredChat: React.FC<KindredChatProps> = ({ user, onUserOnboarded }) => {
       setIsLoading(false);
       speakText(errorMsg, 'soothing');
     }
-  }, [isVoiceMode, isLoading, pendingImage, user, messages, language, addMessage, speakText]);
+  }, [isVoiceMode, isLoading, pendingImage, user, messages, language.name, addMessage, speakText]);
 
 
   const handleWakeWord = useCallback(() => {
@@ -323,19 +288,6 @@ How are you feeling today?`;
             <div className={`message-${msg.sender === 'user' ? 'user' : 'ai'} max-w-xs md:max-w-md lg:max-w-lg transition-all duration-300 hover:scale-[1.02]`}>
               {msg.image && <img src={msg.image} alt="User upload" className="rounded-lg mb-2 max-w-full h-auto border border-emerald-500/20" />}
               <p className="text-white text-sm whitespace-pre-wrap leading-relaxed">{msg.text}</p>
-              {user.showOriginalText && msg.originalText && (
-                <div className="mt-2 pt-2 border-t border-white/10">
-                  <p className="text-xs text-white/60 mb-1">Original:</p>
-                  <p className="text-white/80 text-xs whitespace-pre-wrap leading-relaxed">{msg.originalText}</p>
-                </div>
-              )}
-              {msg.detectedLanguage && user.translationEnabled && (
-                <div className="mt-1">
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300">
-                    {msg.detectedLanguage}
-                  </span>
-                </div>
-              )}
             </div>
           </div>
         ))}
