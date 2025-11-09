@@ -27,7 +27,11 @@ if (process.env.SESSION_SECRET && process.env.SESSION_SECRET.length < 32) {
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5000';
+
+const isDevelopment = process.env.NODE_ENV !== 'production';
+const replitDomain = process.env.REPLIT_DEV_DOMAIN;
+const FRONTEND_URL = process.env.FRONTEND_URL || (replitDomain ? `https://${replitDomain}` : 'http://localhost:5000');
+const BACKEND_URL = process.env.BACKEND_URL || (replitDomain ? `https://${replitDomain}` : `http://localhost:${PORT}`);
 
 const PgSession = connectPgSimple(session);
 
@@ -62,7 +66,7 @@ app.use(passport.session());
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID!,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    callbackURL: process.env.GOOGLE_CALLBACK_URL || '/auth/google/callback'
+    callbackURL: process.env.GOOGLE_CALLBACK_URL || `${BACKEND_URL}/auth/google/callback`
   },
   async (accessToken, refreshToken, profile, done) => {
     try {

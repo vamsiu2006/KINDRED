@@ -8,11 +8,10 @@ import { deleteChatHistory } from '../../services/chatHistory';
 interface SettingsProps {
   user: User;
   onUpdateUser: (updatedData: Partial<User>) => void;
-  onChangePassword: (currentPassword: string, newPassword: string) => { success: boolean, message: string };
   onLogout: () => void;
 }
 
-const Settings: React.FC<SettingsProps> = ({ user, onUpdateUser, onChangePassword, onLogout }) => {
+const Settings: React.FC<SettingsProps> = ({ user, onUpdateUser, onLogout }) => {
   // Profile state
   const [name, setName] = useState(user.name);
   const [languageCode, setLanguageCode] = useState(user.languageCode);
@@ -35,13 +34,6 @@ const Settings: React.FC<SettingsProps> = ({ user, onUpdateUser, onChangePasswor
   const [personalInfoError, setPersonalInfoError] = useState('');
   const [personalInfoSuccess, setPersonalInfoSuccess] = useState('');
 
-  // Password state
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [isSavingPassword, setIsSavingPassword] = useState(false);
-  const [passwordError, setPasswordError] = useState('');
-  const [passwordSuccess, setPasswordSuccess] = useState('');
 
   // Data Management state
   const [clearSuccess, setClearSuccess] = useState('');
@@ -78,12 +70,6 @@ const Settings: React.FC<SettingsProps> = ({ user, onUpdateUser, onChangePasswor
     }
   }, [personalInfoSuccess]);
 
-  useEffect(() => {
-    if (passwordSuccess) {
-      const timer = setTimeout(() => setPasswordSuccess(''), 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [passwordSuccess]);
   
    useEffect(() => {
     if (clearSuccess) {
@@ -159,34 +145,6 @@ const Settings: React.FC<SettingsProps> = ({ user, onUpdateUser, onChangePasswor
     }, 500);
   };
 
-  const handlePasswordSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    setPasswordError('');
-    setPasswordSuccess('');
-
-    if (newPassword.length < 6) {
-      setPasswordError('New password must be at least 6 characters long.');
-      return;
-    }
-    if (newPassword !== confirmPassword) {
-      setPasswordError('New passwords do not match.');
-      return;
-    }
-
-    setIsSavingPassword(true);
-    setTimeout(() => {
-      const result = onChangePassword(currentPassword, newPassword);
-      if (result.success) {
-        setPasswordSuccess(result.message);
-        setCurrentPassword('');
-        setNewPassword('');
-        setConfirmPassword('');
-      } else {
-        setPasswordError(result.message);
-      }
-      setIsSavingPassword(false);
-    }, 500);
-  };
 
   const handleClearHistory = async () => {
     setClearSuccess('');
@@ -419,42 +377,7 @@ const Settings: React.FC<SettingsProps> = ({ user, onUpdateUser, onChangePasswor
         </form>
       </div>
 
-      {/* Security Settings */}
-       <div className="p-4 sm:p-6 lg:p-8 bg-black/20 backdrop-blur-lg rounded-2xl shadow-2xl shadow-black/40 border border-purple-500/20">
-        <h2 className="text-3xl font-bold text-center mb-2 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-fuchsia-400">
-          Security
-        </h2>
-        <p className="text-center text-gray-400 mb-8">Manage your account password.</p>
-
-        <form onSubmit={handlePasswordSubmit} className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">Current Password</label>
-            <input type="password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)}
-              className={`${inputClasses} focus:border-purple-400 focus:shadow-[0_0_15px_rgba(192,132,252,0.4)]`} required />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">New Password</label>
-            <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)}
-              className={`${inputClasses} focus:border-purple-400 focus:shadow-[0_0_15px_rgba(192,132,252,0.4)]`} required />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">Confirm New Password</label>
-            <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}
-              className={`${inputClasses} focus:border-purple-400 focus:shadow-[0_0_15px_rgba(192,132,252,0.4)]`} required />
-          </div>
-          {passwordError && <p className="text-red-400 text-sm text-center">{passwordError}</p>}
-          {passwordSuccess && <p className="text-green-400 text-sm text-center">{passwordSuccess}</p>}
-          <div>
-            <button type="submit" disabled={isSavingPassword}
-              className={`${buttonClasses} bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-700 hover:to-fuchsia-700 shadow-purple-900/40`}>
-              {isSavingPassword && <LoadingSpinner />}
-              {isSavingPassword ? 'Updating...' : 'Change Password'}
-            </button>
-          </div>
-        </form>
-      </div>
-
-       {/* Chat History */}
+      {/* Chat History */}
        <div className="p-4 sm:p-6 lg:p-8 bg-black/20 backdrop-blur-lg rounded-2xl shadow-2xl shadow-black/40 border border-blue-500/20">
         <h2 className="text-3xl font-bold text-center mb-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
           Chat History

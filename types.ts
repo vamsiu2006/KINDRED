@@ -1,11 +1,11 @@
 export interface User {
+  id?: number;
+  googleId?: string;
   name: string;
-  languageCode: string;
   email: string;
-  password: string; // In a real app, this would be a secure hash, not plain text.
-  voiceName: string;
-  hasBeenOnboarded?: boolean;
-  profilePicture?: string; // Base64 encoded image
+  languageCode: string;
+  voiceName: string | null;
+  profilePicture?: string; // Base64 encoded image or Google profile picture URL
   phone?: string;
   bloodGroup?: string;
   weight?: string; // in kg or lbs
@@ -14,6 +14,8 @@ export interface User {
   address?: string;
   emergencyContact?: string;
   emergencyContactPhone?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Message {
