@@ -68,11 +68,63 @@ export const useAuth = () => {
     }
   }, [user]);
 
+  const signup = useCallback(async (email: string, password: string, name: string) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/signup`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({ email, password, name })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setUser(data.user);
+        return { success: true, message: data.message };
+      } else {
+        return { success: false, error: data.error };
+      }
+    } catch (error) {
+      console.error('Signup error:', error);
+      return { success: false, error: 'Failed to create account. Please try again.' };
+    }
+  }, []);
+
+  const login = useCallback(async (email: string, password: string) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setUser(data.user);
+        return { success: true, message: data.message };
+      } else {
+        return { success: false, error: data.error };
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      return { success: false, error: 'Failed to log in. Please try again.' };
+    }
+  }, []);
+
   return {
     user,
     isLoading,
     logout,
     updateUser,
-    refreshUser: checkSession
+    refreshUser: checkSession,
+    signup,
+    login
   };
 };
