@@ -27,10 +27,13 @@ The application features a "Therapeutic & Accessible UI" with a greenish-red col
 3.  **Visual Assistant**: Camera-based image analysis providing simplified, structured responses for identification, uses, side effects/risks, and precautions.
 4.  **Medical Manager**: AI-powered analysis of medical documents (prescriptions, reports) to extract medication schedules. It features a 14-day medication calendar with check-off functionality and safety precaution displays.
 5.  **Emergency Dashboard**: Provides immediate access to emergency services with click-to-call functionality for 911, ambulance, poison control, mental health crisis hotline (988), and non-emergency services. Features location-based hospital/ER finding, panic button with confirmation dialog, and emergency tips. Uses browser geolocation to help find nearest emergency facilities via Google Maps integration.
-6.  **Settings**: Allows customization of voice, language, and user preferences, including viewing and clearing chat history.
+6.  **User Profile System**: Comprehensive personal information management with profile picture upload (max 1MB), contact details (phone, email), health information (blood group, weight, height, date of birth), address, and emergency contacts. Profile picture appears in header with click-to-navigate to Settings.
+7.  **Settings**: Allows customization of voice, language, and user preferences, including viewing and clearing chat history, and managing personal profile information.
 
 ### System Design Choices
--   Client-side data persistence for chat history, medical data, improvement records, and reports using `localStorage`.
+-   Client-side data persistence for chat history, medical data, improvement records, reports, and user profiles using `localStorage`.
+-   Profile pictures stored as base64 with 1MB limit to prevent localStorage quota overflow (~1.33MB encoded fits safely within 5-10MB browser limits).
+-   Graceful error handling for localStorage quota errors with automatic fallback (saves data without profile picture if storage full).
 -   Real-time audio responses for chat and image analysis using the browser's Web Speech API, eliminating TTS lag.
 -   Intelligent voice selection with multiple options (female/male, various accents) and platform-aware matching.
 -   Automatic silence detection for speech recognition for hands-free interaction.
@@ -48,6 +51,36 @@ The application features a "Therapeutic & Accessible UI" with a greenish-red col
 - **Port**: 5000 (configured for Replit's webview)
 
 ## Recent Changes (November 9, 2025 - Latest)
+- **User Profile System**:
+  - **Personal Information Section** in Settings with cyan/emerald glassmorphism theme
+  - **Profile Picture Upload**:
+    * FileReader API for base64 encoding
+    * 1MB size limit validation (prevents localStorage quota overflow)
+    * Image type validation (PNG, JPG, JPEG, WEBP)
+    * Live preview before save
+    * Graceful quota error handling with automatic fallback
+  - **Profile Fields**:
+    * Phone number (tel input)
+    * Blood group (dropdown: A+, A-, B+, B-, O+, O-, AB+, AB-)
+    * Weight and Height (text inputs with unit suggestions)
+    * Date of birth (date picker)
+    * Address (textarea)
+    * Emergency contact name and phone
+  - **Header Integration**:
+    * Profile picture appears in top-right corner
+    * Shows uploaded picture or gradient initial avatar
+    * Click navigates to Settings
+    * Responsive design (hides text on mobile)
+  - **Data Storage**:
+    * All profile data persists to localStorage via existing User object
+    * QuotaExceededError handling: Saves data without picture if storage full, alerts user
+    * Maintains username change consistency (no duplicate records)
+    * Type-safe implementation with extended User interface
+  - **Database Schema** (shared/schema.ts):
+    * Added `userProfiles` table for future server-side migration
+    * Currently unused but ready for backend implementation
+
+## Previous Changes (November 9, 2025)
 - **Location-Based Emergency Contacts Enhancement**:
   - **Automatic Country Detection**: Two-tier system for detecting user's location
     * Primary: Browser geolocation API → BigDataCloud reverse geocoding (lat/lon → country code)
