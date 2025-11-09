@@ -14,6 +14,9 @@ export interface User {
   address?: string;
   emergencyContact?: string;
   emergencyContactPhone?: string;
+  translationEnabled?: boolean; // Enable/disable translation
+  autoDetectLanguage?: boolean; // Auto-detect user's input language
+  showOriginalText?: boolean; // Show original text alongside translation
 }
 
 export interface Message {
@@ -22,6 +25,9 @@ export interface Message {
   sender: 'user' | 'ai';
   timestamp: string;
   image?: string; // Optional: for displaying uploaded images
+  originalText?: string; // Original text before translation
+  detectedLanguage?: string; // Detected language of the message
+  translatedFrom?: string; // Language code translated from
 }
 
 export enum View {
