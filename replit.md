@@ -22,13 +22,14 @@ The application features a "Therapeutic & Accessible UI" with a greenish-red col
 
 ### Key Features
 1.  **Kindred Chat**: Conversational AI with instant voice interaction (using Web Speech API), automatic chat history saving, and access to past 30 days of conversations.
+    *   **AI-Powered Translation**: Real-time language translation for both text and voice messages using Gemini API, supporting 21+ languages including English, Spanish, French, Hindi, Chinese, Arabic, and more.
 2.  **Creative Dashboard**: Tracks daily improvements across emotional, mental, physical, and medical well-being using a 1-10 scale. It provides 30-day line graphs, 6-month aggregated averages, and "Recent Insights" cards.
     *   **AI Weekly & Monthly Insights**: Generates AI-powered reports analyzing improvement data and chat conversations, offering summaries, personalized recommendations, and trend analysis.
 3.  **Visual Assistant**: Camera-based image analysis providing simplified, structured responses for identification, uses, side effects/risks, and precautions.
 4.  **Medical Manager**: AI-powered analysis of medical documents (prescriptions, reports) to extract medication schedules. It features a 14-day medication calendar with check-off functionality and safety precaution displays.
 5.  **Emergency Dashboard**: Provides immediate access to emergency services with click-to-call functionality for 911, ambulance, poison control, mental health crisis hotline (988), and non-emergency services. Features location-based hospital/ER finding, panic button with confirmation dialog, and emergency tips. Uses browser geolocation to help find nearest emergency facilities via Google Maps integration.
 6.  **User Profile System**: Comprehensive personal information management with profile picture upload (max 1MB), contact details (phone, email), health information (blood group, weight, height, date of birth), address, and emergency contacts. Profile picture appears in header with click-to-navigate to Settings.
-7.  **Settings**: Allows customization of voice, language, and user preferences, including viewing and clearing chat history, and managing personal profile information.
+7.  **Settings**: Allows customization of voice, language, translation preferences, and user settings, including viewing and clearing chat history, and managing personal profile information.
 
 ### System Design Choices
 -   Client-side data persistence for chat history, medical data, improvement records, reports, and user profiles using `localStorage`.
@@ -40,7 +41,7 @@ The application features a "Therapeutic & Accessible UI" with a greenish-red col
 -   Structured AI responses for clarity and user safety (e.g., Visual Assistant).
 
 ## External Dependencies
--   **Google Gemini API**: Used for AI chat, image analysis, medical document analysis, and generating weekly/monthly reports.
+-   **Google Gemini API**: Used for AI chat, image analysis, medical document analysis, real-time translation, language detection, and generating weekly/monthly reports.
 -   **PostgreSQL**: Database for storing application data via Drizzle ORM.
 -   **Recharts**: JavaScript charting library for data visualization in the Creative Dashboard.
 
@@ -51,6 +52,41 @@ The application features a "Therapeutic & Accessible UI" with a greenish-red col
 - **Port**: 5000 (configured for Replit's webview)
 
 ## Recent Changes (November 9, 2025 - Latest)
+- **Multi-Language Translation System**:
+  - **Translation Service** (`services/translation.ts`):
+    * AI-powered language detection using Gemini API
+    * Text translation between 21+ supported languages
+    * Context-aware, culturally nuanced translations
+    * Automatic language code matching for supported languages
+  - **Translation Settings** (Settings component):
+    * Enable/disable translation toggle
+    * Auto-detect language option for automatic detection of user input
+    * Show original text option to display both translated and original messages
+    * Purple-themed glassmorphism UI section with clear explanations
+  - **Chat Integration**:
+    * Automatic language detection for user messages when translation enabled
+    * Bi-directional translation: user input → AI language, AI response → user language
+    * Display of detected language badges on translated messages
+    * Original text preservation with optional display
+  - **Voice Synthesis Enhancement**:
+    * Language-aware voice selection using Web Speech API
+    * Automatic voice matching for detected/translated language
+    * Support for language-specific voices (getBestVoiceForLanguage function)
+    * Fallback to best available voice if specific language voice unavailable
+  - **Message Schema Updates**:
+    * Added `originalText` field to store pre-translation text
+    * Added `detectedLanguage` field to track language detection results
+    * Added `translatedFrom` field for translation metadata
+  - **User Preferences**:
+    * `translationEnabled` - master toggle for translation feature
+    * `autoDetectLanguage` - enables automatic language detection
+    * `showOriginalText` - displays original alongside translated text
+  - **Implementation Details**:
+    * Uses Gemini 2.5 Flash model for translation (cost-effective: ~$0.75 per 1M chars)
+    * Confidence threshold (0.6) for language detection to prevent false positives
+    * Graceful fallback if translation fails (displays original message)
+    * Performance optimized with async translation calls
+
 - **User Profile System**:
   - **Personal Information Section** in Settings with cyan/emerald glassmorphism theme
   - **Profile Picture Upload**:
