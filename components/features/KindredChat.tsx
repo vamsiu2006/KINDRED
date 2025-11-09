@@ -64,10 +64,10 @@ const KindredChat: React.FC<KindredChatProps> = ({ user, onUserOnboarded }) => {
       return newMessage;
   }, [user.name]);
 
-  const speakText = useCallback(async (text: string, tone: 'soothing' | 'cheerful' | 'neutral' = 'neutral') => {
+  const speakText = useCallback(async (text: string, tone: 'soothing' | 'cheerful' | 'neutral' = 'neutral', speechLanguageCode?: string) => {
     try {
       setIsSpeaking(true);
-      await speakTextInstantly(text, user.voiceName);
+      await speakTextInstantly(text, user.voiceName, speechLanguageCode || language.code);
     } catch (error) {
       console.error("Failed to speak text:", error);
     } finally {
@@ -76,7 +76,7 @@ const KindredChat: React.FC<KindredChatProps> = ({ user, onUserOnboarded }) => {
         startListening(false);
       }
     }
-  }, [user.voiceName, isVoiceMode]);
+  }, [user.voiceName, isVoiceMode, language.code]);
 
   const handleSendMessage = useCallback(async (messageText: string) => {
     if ((!messageText.trim() && !pendingImage) || isLoading) return;
