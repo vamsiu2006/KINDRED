@@ -21,6 +21,20 @@ const Settings: React.FC<SettingsProps> = ({ user, onUpdateUser, onChangePasswor
   const [profileError, setProfileError] = useState('');
   const [profileSuccess, setProfileSuccess] = useState('');
 
+  // Personal Information state
+  const [profilePicture, setProfilePicture] = useState(user.profilePicture || '');
+  const [phone, setPhone] = useState(user.phone || '');
+  const [bloodGroup, setBloodGroup] = useState(user.bloodGroup || '');
+  const [weight, setWeight] = useState(user.weight || '');
+  const [height, setHeight] = useState(user.height || '');
+  const [dateOfBirth, setDateOfBirth] = useState(user.dateOfBirth || '');
+  const [address, setAddress] = useState(user.address || '');
+  const [emergencyContact, setEmergencyContact] = useState(user.emergencyContact || '');
+  const [emergencyContactPhone, setEmergencyContactPhone] = useState(user.emergencyContactPhone || '');
+  const [isSavingPersonalInfo, setIsSavingPersonalInfo] = useState(false);
+  const [personalInfoError, setPersonalInfoError] = useState('');
+  const [personalInfoSuccess, setPersonalInfoSuccess] = useState('');
+
   // Password state
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -39,6 +53,15 @@ const Settings: React.FC<SettingsProps> = ({ user, onUpdateUser, onChangePasswor
       setName(user.name);
       setLanguageCode(user.languageCode);
       setVoiceName(user.voiceName);
+      setProfilePicture(user.profilePicture || '');
+      setPhone(user.phone || '');
+      setBloodGroup(user.bloodGroup || '');
+      setWeight(user.weight || '');
+      setHeight(user.height || '');
+      setDateOfBirth(user.dateOfBirth || '');
+      setAddress(user.address || '');
+      setEmergencyContact(user.emergencyContact || '');
+      setEmergencyContactPhone(user.emergencyContactPhone || '');
   }, [user]);
   
    useEffect(() => {
@@ -47,6 +70,13 @@ const Settings: React.FC<SettingsProps> = ({ user, onUpdateUser, onChangePasswor
       return () => clearTimeout(timer);
     }
   }, [profileSuccess]);
+
+  useEffect(() => {
+    if (personalInfoSuccess) {
+      const timer = setTimeout(() => setPersonalInfoSuccess(''), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [personalInfoSuccess]);
 
   useEffect(() => {
     if (passwordSuccess) {
@@ -76,6 +106,56 @@ const Settings: React.FC<SettingsProps> = ({ user, onUpdateUser, onChangePasswor
       onUpdateUser({ name, languageCode, voiceName });
       setIsSavingProfile(false);
       setProfileSuccess('Your profile has been updated successfully!');
+    }, 500);
+  };
+
+  const handleProfilePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      setPersonalInfoError('Please upload an image file (PNG, JPG, JPEG, WEBP)');
+      return;
+    }
+
+    // Limit to 1MB to ensure base64 encoding fits in localStorage (~1.33MB encoded)
+    if (file.size > 1024 * 1024) {
+      setPersonalInfoError('Image size must be less than 1MB for reliable storage');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64String = reader.result as string;
+      setProfilePicture(base64String);
+      setPersonalInfoError('');
+    };
+    reader.onerror = () => {
+      setPersonalInfoError('Failed to read image file');
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handlePersonalInfoSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    setPersonalInfoError('');
+    setPersonalInfoSuccess('');
+    setIsSavingPersonalInfo(true);
+
+    setTimeout(() => {
+      onUpdateUser({
+        profilePicture,
+        phone,
+        bloodGroup,
+        weight,
+        height,
+        dateOfBirth,
+        address,
+        emergencyContact,
+        emergencyContactPhone
+      });
+      setIsSavingPersonalInfo(false);
+      setPersonalInfoSuccess('Your personal information has been updated successfully!');
     }, 500);
   };
 
@@ -169,6 +249,171 @@ const Settings: React.FC<SettingsProps> = ({ user, onUpdateUser, onChangePasswor
               className={`${buttonClasses} bg-gradient-to-r from-teal-600 to-purple-600 hover:from-teal-700 hover:to-purple-700 shadow-teal-900/40`}>
               {isSavingProfile && <LoadingSpinner />}
               {isSavingProfile ? 'Saving...' : 'Save Profile Changes'}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      {/* Personal Information */}
+      <div className="p-4 sm:p-6 lg:p-8 bg-black/20 backdrop-blur-lg rounded-2xl shadow-2xl shadow-black/40 border border-cyan-500/20">
+        <h2 className="text-3xl font-bold text-center mb-2 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-emerald-400 to-teal-400">
+          Personal Information
+        </h2>
+        <p className="text-center text-gray-400 mb-8">Manage your profile picture and health details.</p>
+
+        <form onSubmit={handlePersonalInfoSubmit} className="space-y-6">
+          {/* Profile Picture */}
+          <div className="text-center">
+            <label className="block text-sm font-medium text-gray-300 mb-4">Profile Picture</label>
+            <div className="flex flex-col items-center gap-4">
+              {profilePicture ? (
+                <img
+                  src={profilePicture}
+                  alt="Profile"
+                  className="w-32 h-32 rounded-full object-cover border-4 border-emerald-500/50 shadow-lg shadow-emerald-500/30"
+                />
+              ) : (
+                <div className="w-32 h-32 rounded-full bg-gradient-to-br from-emerald-500/30 to-cyan-500/30 flex items-center justify-center text-5xl font-bold text-emerald-400 border-4 border-emerald-500/50">
+                  {name.charAt(0).toUpperCase()}
+                </div>
+              )}
+              <label className="cursor-pointer px-6 py-3 rounded-lg bg-gradient-to-r from-cyan-500 to-emerald-500 text-white font-semibold hover:from-cyan-600 hover:to-emerald-600 transition-all duration-300 shadow-lg hover:shadow-cyan-500/30">
+                📸 Upload Photo
+                <input
+                  type="file"
+                  accept="image/png,image/jpeg,image/jpg,image/webp"
+                  onChange={handleProfilePictureChange}
+                  className="hidden"
+                />
+              </label>
+              <p className="text-xs text-gray-400">Max 1MB - PNG, JPG, JPEG, WEBP</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Phone */}
+            <div>
+              <label htmlFor="phone" className="block text-sm font-medium text-gray-300 mb-2">📱 Phone Number</label>
+              <input
+                id="phone"
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="+1 (555) 123-4567"
+                className={`${inputClasses} focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(6,182,212,0.4)]`}
+              />
+            </div>
+
+            {/* Blood Group */}
+            <div>
+              <label htmlFor="bloodGroup" className="block text-sm font-medium text-gray-300 mb-2">🩸 Blood Group</label>
+              <select
+                id="bloodGroup"
+                value={bloodGroup}
+                onChange={(e) => setBloodGroup(e.target.value)}
+                className={`${inputClasses} focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(6,182,212,0.4)]`}
+              >
+                <option value="">Select Blood Group</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+              </select>
+            </div>
+
+            {/* Weight */}
+            <div>
+              <label htmlFor="weight" className="block text-sm font-medium text-gray-300 mb-2">⚖️ Weight</label>
+              <input
+                id="weight"
+                type="text"
+                value={weight}
+                onChange={(e) => setWeight(e.target.value)}
+                placeholder="70 kg or 154 lbs"
+                className={`${inputClasses} focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(6,182,212,0.4)]`}
+              />
+            </div>
+
+            {/* Height */}
+            <div>
+              <label htmlFor="height" className="block text-sm font-medium text-gray-300 mb-2">📏 Height</label>
+              <input
+                id="height"
+                type="text"
+                value={height}
+                onChange={(e) => setHeight(e.target.value)}
+                placeholder="175 cm or 5'9&quot;"
+                className={`${inputClasses} focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(6,182,212,0.4)]`}
+              />
+            </div>
+
+            {/* Date of Birth */}
+            <div>
+              <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-300 mb-2">🎂 Date of Birth</label>
+              <input
+                id="dateOfBirth"
+                type="date"
+                value={dateOfBirth}
+                onChange={(e) => setDateOfBirth(e.target.value)}
+                className={`${inputClasses} focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(6,182,212,0.4)]`}
+              />
+            </div>
+
+            {/* Emergency Contact */}
+            <div>
+              <label htmlFor="emergencyContact" className="block text-sm font-medium text-gray-300 mb-2">🚨 Emergency Contact Name</label>
+              <input
+                id="emergencyContact"
+                type="text"
+                value={emergencyContact}
+                onChange={(e) => setEmergencyContact(e.target.value)}
+                placeholder="John Doe"
+                className={`${inputClasses} focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(6,182,212,0.4)]`}
+              />
+            </div>
+          </div>
+
+          {/* Address */}
+          <div>
+            <label htmlFor="address" className="block text-sm font-medium text-gray-300 mb-2">🏠 Address</label>
+            <textarea
+              id="address"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              placeholder="123 Main St, City, State, ZIP"
+              rows={3}
+              className={`${inputClasses} focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(6,182,212,0.4)] resize-none`}
+            />
+          </div>
+
+          {/* Emergency Contact Phone */}
+          <div>
+            <label htmlFor="emergencyContactPhone" className="block text-sm font-medium text-gray-300 mb-2">📞 Emergency Contact Phone</label>
+            <input
+              id="emergencyContactPhone"
+              type="tel"
+              value={emergencyContactPhone}
+              onChange={(e) => setEmergencyContactPhone(e.target.value)}
+              placeholder="+1 (555) 987-6543"
+              className={`${inputClasses} focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(6,182,212,0.4)]`}
+            />
+          </div>
+
+          {personalInfoError && <p className="text-red-400 text-sm text-center">{personalInfoError}</p>}
+          {personalInfoSuccess && <p className="text-green-400 text-sm text-center">{personalInfoSuccess}</p>}
+          
+          <div>
+            <button
+              type="submit"
+              disabled={isSavingPersonalInfo}
+              className={`${buttonClasses} bg-gradient-to-r from-cyan-600 to-emerald-600 hover:from-cyan-700 hover:to-emerald-700 shadow-cyan-900/40`}
+            >
+              {isSavingPersonalInfo && <LoadingSpinner />}
+              {isSavingPersonalInfo ? 'Saving...' : 'Save Personal Information'}
             </button>
           </div>
         </form>

@@ -5,6 +5,15 @@ export interface User {
   password: string; // In a real app, this would be a secure hash, not plain text.
   voiceName: string;
   hasBeenOnboarded?: boolean;
+  profilePicture?: string; // Base64 encoded image
+  phone?: string;
+  bloodGroup?: string;
+  weight?: string; // in kg or lbs
+  height?: string; // in cm or feet/inches
+  dateOfBirth?: string;
+  address?: string;
+  emergencyContact?: string;
+  emergencyContactPhone?: string;
 }
 
 export interface Message {

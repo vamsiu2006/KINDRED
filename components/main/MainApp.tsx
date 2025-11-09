@@ -39,7 +39,10 @@ const MainApp: React.FC<MainAppProps> = ({ user, onLogout, onUpdateUser, onChang
     <div className="flex h-screen overflow-hidden">
       <Sidebar currentView={currentView} setCurrentView={setCurrentView} />
       <div className="flex-1 flex flex-col bg-black/20">
-        <Header userName={user.name} />
+        <Header 
+          user={user} 
+          onProfileClick={() => setCurrentView(View.Settings)} 
+        />
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
           {renderView()}
         </main>

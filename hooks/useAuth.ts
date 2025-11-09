@@ -125,7 +125,7 @@ export const useAuth = () => {
     setUser(null);
   }, [user]);
 
-  const updateUser = useCallback((updatedData: Partial<Pick<User, 'name' | 'languageCode' | 'voiceName'>>) => {
+  const updateUser = useCallback((updatedData: Partial<User>) => {
       setUser(currentUser => {
           if (!currentUser) return null;
           
@@ -150,8 +150,38 @@ export const useAuth = () => {
               newDb[oldKey] = newUser;
           }
 
-          localStorage.setItem(USERS_DB_KEY, JSON.stringify(newDb));
-          return newUser;
+          try {
+              localStorage.setItem(USERS_DB_KEY, JSON.stringify(newDb));
+              return newUser;
+          } catch (error) {
+              // Handle localStorage quota exceeded or other storage errors
+              console.error("Failed to save user data to localStorage:", error);
+              
+              // Try to remove profile picture if storage quota exceeded
+              if (error instanceof DOMException && error.name === 'QuotaExceededError') {
+                  console.warn("Storage quota exceeded. Profile picture may be too large.");
+                  
+                  // Attempt to save without profile picture
+                  // Use the already-mutated newDb to preserve name-change logic
+                  const newUserWithoutPicture = { ...newUser, profilePicture: undefined };
+                  const keyToUpdate = updatedData.name?.toLowerCase() || oldKey;
+                  const dbWithoutPicture = { ...newDb }; // Use newDb, not usersDb
+                  dbWithoutPicture[keyToUpdate] = newUserWithoutPicture;
+                  
+                  try {
+                      localStorage.setItem(USERS_DB_KEY, JSON.stringify(dbWithoutPicture));
+                      alert("Storage full! Profile picture is too large. Other data saved successfully. Please use a smaller image (max 1MB).");
+                      return newUserWithoutPicture;
+                  } catch (retryError) {
+                      console.error("Failed to save even without profile picture:", retryError);
+                      alert("Failed to save profile data. Storage might be full. Please free up space or use smaller images.");
+                      return currentUser; // Rollback on total failure
+                  }
+              } else {
+                  alert("Failed to save profile data. Please try again.");
+                  return currentUser; // Rollback on error
+              }
+          }
       });
   }, []);
 

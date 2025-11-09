@@ -120,3 +120,19 @@ export const monthlyReports = pgTable('monthly_reports', {
   areasForImprovement: text('areas_for_improvement'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
+
+export const userProfiles = pgTable('user_profiles', {
+  id: serial('id').primaryKey(),
+  userId: text('user_id').notNull().unique(),
+  profilePicture: text('profile_picture'), // Base64 encoded image
+  phone: text('phone'),
+  bloodGroup: text('blood_group'),
+  weight: text('weight'), // stored as string with unit (e.g., "70 kg")
+  height: text('height'), // stored as string with unit (e.g., "175 cm")
+  dateOfBirth: date('date_of_birth'),
+  address: text('address'),
+  emergencyContact: text('emergency_contact'),
+  emergencyContactPhone: text('emergency_contact_phone'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
