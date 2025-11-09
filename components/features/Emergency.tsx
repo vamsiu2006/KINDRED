@@ -12,61 +12,411 @@ interface EmergencyContact {
   description: string;
 }
 
+interface CountryEmergencyData {
+  country: string;
+  countryCode: string;
+  flag: string;
+  panicNumber: string;
+  contacts: EmergencyContact[];
+}
+
+const EMERGENCY_CONTACTS_BY_COUNTRY: { [key: string]: CountryEmergencyData } = {
+  'US': {
+    country: 'United States',
+    countryCode: 'US',
+    flag: '🇺🇸',
+    panicNumber: '911',
+    contacts: [
+      {
+        name: '911 Emergency',
+        number: '911',
+        type: 'ambulance',
+        description: 'Immediate medical, fire, or police emergency'
+      },
+      {
+        name: 'Ambulance Service',
+        number: '911',
+        type: 'ambulance',
+        description: 'Medical emergencies and ambulance dispatch'
+      },
+      {
+        name: 'Poison Control',
+        number: '1-800-222-1222',
+        type: 'hospital',
+        description: '24/7 poison control and medical guidance'
+      },
+      {
+        name: 'Mental Health Crisis',
+        number: '988',
+        type: 'hotline',
+        description: 'Suicide & crisis lifeline - 24/7 support'
+      },
+      {
+        name: 'Non-Emergency',
+        number: '311',
+        type: 'hospital',
+        description: 'Non-urgent medical questions and referrals'
+      }
+    ]
+  },
+  'GB': {
+    country: 'United Kingdom',
+    countryCode: 'GB',
+    flag: '🇬🇧',
+    panicNumber: '999',
+    contacts: [
+      {
+        name: '999 Emergency',
+        number: '999',
+        type: 'ambulance',
+        description: 'Police, ambulance, fire, and rescue services'
+      },
+      {
+        name: '112 EU Emergency',
+        number: '112',
+        type: 'ambulance',
+        description: 'Alternative emergency number (EU standard)'
+      },
+      {
+        name: 'NHS 111',
+        number: '111',
+        type: 'hospital',
+        description: 'Non-emergency medical advice and guidance'
+      },
+      {
+        name: 'Samaritans',
+        number: '116-123',
+        type: 'hotline',
+        description: '24/7 emotional support and crisis helpline'
+      }
+    ]
+  },
+  'IN': {
+    country: 'India',
+    countryCode: 'IN',
+    flag: '🇮🇳',
+    panicNumber: '112',
+    contacts: [
+      {
+        name: '112 Emergency',
+        number: '112',
+        type: 'ambulance',
+        description: 'Universal emergency number - all services'
+      },
+      {
+        name: '108 Ambulance',
+        number: '108',
+        type: 'ambulance',
+        description: 'Free ambulance service across India'
+      },
+      {
+        name: '102 Ambulance',
+        number: '102',
+        type: 'ambulance',
+        description: 'Medical emergency ambulance service'
+      },
+      {
+        name: 'Mental Health',
+        number: '9152987821',
+        type: 'hotline',
+        description: 'COOJ Mental Health Foundation helpline'
+      }
+    ]
+  },
+  'AU': {
+    country: 'Australia',
+    countryCode: 'AU',
+    flag: '🇦🇺',
+    panicNumber: '000',
+    contacts: [
+      {
+        name: '000 Emergency',
+        number: '000',
+        type: 'ambulance',
+        description: 'Police, ambulance, and fire services'
+      },
+      {
+        name: '112 Mobile Emergency',
+        number: '112',
+        type: 'ambulance',
+        description: 'Emergency number for mobile phones'
+      },
+      {
+        name: 'Lifeline',
+        number: '13-11-14',
+        type: 'hotline',
+        description: '24/7 crisis support and suicide prevention'
+      },
+      {
+        name: 'Healthdirect',
+        number: '1800-022-222',
+        type: 'hospital',
+        description: '24/7 health advice from nurses'
+      }
+    ]
+  },
+  'CA': {
+    country: 'Canada',
+    countryCode: 'CA',
+    flag: '🇨🇦',
+    panicNumber: '911',
+    contacts: [
+      {
+        name: '911 Emergency',
+        number: '911',
+        type: 'ambulance',
+        description: 'Police, ambulance, fire, and rescue services'
+      },
+      {
+        name: 'Telehealth',
+        number: '811',
+        type: 'hospital',
+        description: 'Non-emergency health information and advice'
+      },
+      {
+        name: 'Poison Control',
+        number: '1-844-764-7669',
+        type: 'hospital',
+        description: '24/7 poison control center'
+      },
+      {
+        name: 'Crisis Services',
+        number: '988',
+        type: 'hotline',
+        description: 'Suicide prevention and mental health crisis'
+      }
+    ]
+  },
+  'DE': {
+    country: 'Germany',
+    countryCode: 'DE',
+    flag: '🇩🇪',
+    panicNumber: '112',
+    contacts: [
+      {
+        name: '112 Emergency',
+        number: '112',
+        type: 'ambulance',
+        description: 'Fire and medical emergencies'
+      },
+      {
+        name: '110 Police',
+        number: '110',
+        type: 'police',
+        description: 'Police emergency number'
+      },
+      {
+        name: 'Medical On-Call',
+        number: '116-117',
+        type: 'hospital',
+        description: 'Non-emergency medical service'
+      },
+      {
+        name: 'TelefonSeelsorge',
+        number: '0800-111-0-111',
+        type: 'hotline',
+        description: '24/7 crisis and counseling hotline'
+      }
+    ]
+  },
+  'FR': {
+    country: 'France',
+    countryCode: 'FR',
+    flag: '🇫🇷',
+    panicNumber: '112',
+    contacts: [
+      {
+        name: '112 Emergency',
+        number: '112',
+        type: 'ambulance',
+        description: 'European emergency number'
+      },
+      {
+        name: '15 SAMU',
+        number: '15',
+        type: 'ambulance',
+        description: 'Medical emergencies and ambulance'
+      },
+      {
+        name: '17 Police',
+        number: '17',
+        type: 'police',
+        description: 'Police emergency number'
+      },
+      {
+        name: 'SOS Suicide',
+        number: '01-45-39-40-00',
+        type: 'hotline',
+        description: '24/7 suicide prevention hotline'
+      }
+    ]
+  },
+  'JP': {
+    country: 'Japan',
+    countryCode: 'JP',
+    flag: '🇯🇵',
+    panicNumber: '119',
+    contacts: [
+      {
+        name: '119 Fire/Ambulance',
+        number: '119',
+        type: 'ambulance',
+        description: 'Fire and medical emergencies'
+      },
+      {
+        name: '110 Police',
+        number: '110',
+        type: 'police',
+        description: 'Police emergency number'
+      },
+      {
+        name: 'Tokyo English Lifeline',
+        number: '03-5774-0992',
+        type: 'hotline',
+        description: 'Free anonymous telephone counseling'
+      }
+    ]
+  },
+  'CN': {
+    country: 'China',
+    countryCode: 'CN',
+    flag: '🇨🇳',
+    panicNumber: '120',
+    contacts: [
+      {
+        name: '120 Ambulance',
+        number: '120',
+        type: 'ambulance',
+        description: 'Medical emergency and ambulance service'
+      },
+      {
+        name: '110 Police',
+        number: '110',
+        type: 'police',
+        description: 'Police emergency number'
+      },
+      {
+        name: '119 Fire',
+        number: '119',
+        type: 'fire',
+        description: 'Fire emergency services'
+      },
+      {
+        name: 'Beijing Suicide Hotline',
+        number: '010-82951332',
+        type: 'hotline',
+        description: '24/7 psychological crisis intervention'
+      }
+    ]
+  },
+  'BR': {
+    country: 'Brazil',
+    countryCode: 'BR',
+    flag: '🇧🇷',
+    panicNumber: '192',
+    contacts: [
+      {
+        name: '192 Ambulance',
+        number: '192',
+        type: 'ambulance',
+        description: 'Medical emergency service (SAMU)'
+      },
+      {
+        name: '190 Police',
+        number: '190',
+        type: 'police',
+        description: 'Military police emergency'
+      },
+      {
+        name: '193 Fire',
+        number: '193',
+        type: 'fire',
+        description: 'Fire department emergency'
+      },
+      {
+        name: 'CVV Helpline',
+        number: '188',
+        type: 'hotline',
+        description: '24/7 emotional support and suicide prevention'
+      }
+    ]
+  }
+};
+
 const Emergency: React.FC<EmergencyProps> = ({ user }) => {
   const [location, setLocation] = useState<{ lat: number; lon: number } | null>(null);
   const [locationError, setLocationError] = useState<string>('');
   const [isPanicActive, setIsPanicActive] = useState(false);
-
-  const emergencyContacts: EmergencyContact[] = [
-    {
-      name: '911 Emergency',
-      number: '911',
-      type: 'ambulance',
-      description: 'Immediate medical, fire, or police emergency'
-    },
-    {
-      name: 'Ambulance Service',
-      number: '911',
-      type: 'ambulance',
-      description: 'Medical emergencies and ambulance dispatch'
-    },
-    {
-      name: 'Poison Control',
-      number: '1-800-222-1222',
-      type: 'hospital',
-      description: '24/7 poison control and medical guidance'
-    },
-    {
-      name: 'Mental Health Crisis',
-      number: '988',
-      type: 'hotline',
-      description: 'Suicide & crisis lifeline - 24/7 support'
-    },
-    {
-      name: 'Non-Emergency Medical',
-      number: '311',
-      type: 'hospital',
-      description: 'Non-urgent medical questions and referrals'
-    },
-  ];
+  const [countryCode, setCountryCode] = useState<string>('US');
+  const [isDetectingCountry, setIsDetectingCountry] = useState(true);
+  const [detectedCountry, setDetectedCountry] = useState<string>('');
 
   useEffect(() => {
+    detectLocationAndCountry();
+  }, []);
+
+  const detectLocationAndCountry = async () => {
+    setIsDetectingCountry(true);
+    
+    // Try geolocation first
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setLocation({
-            lat: position.coords.latitude,
-            lon: position.coords.longitude
-          });
+        async (position) => {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+          setLocation({ lat, lon });
+          
+          // Use reverse geocoding to get country
+          try {
+            const response = await fetch(
+              `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`
+            );
+            const data = await response.json();
+            const detectedCode = data.countryCode || 'US';
+            setCountryCode(detectedCode);
+            setDetectedCountry(data.countryName || EMERGENCY_CONTACTS_BY_COUNTRY[detectedCode]?.country || 'your location');
+          } catch (error) {
+            console.error('Reverse geocoding failed:', error);
+            // Fallback to IP-based detection
+            await detectCountryByIP();
+          }
+          setIsDetectingCountry(false);
         },
-        (error) => {
-          setLocationError('Unable to access location. Please enable location services.');
+        async (error) => {
+          setLocationError('Unable to access location. Using IP-based detection...');
+          // Fallback to IP-based detection
+          await detectCountryByIP();
+          setIsDetectingCountry(false);
         }
       );
     } else {
-      setLocationError('Geolocation is not supported by your browser.');
+      setLocationError('Geolocation not supported. Using IP-based detection...');
+      await detectCountryByIP();
+      setIsDetectingCountry(false);
     }
-  }, []);
+  };
+
+  const detectCountryByIP = async () => {
+    try {
+      const response = await fetch('https://ipapi.co/json/');
+      const data = await response.json();
+      const detectedCode = data.country_code || 'US';
+      setCountryCode(detectedCode);
+      setDetectedCountry(data.country_name || EMERGENCY_CONTACTS_BY_COUNTRY[detectedCode]?.country || 'your location');
+      
+      // Also set approximate location for maps
+      if (data.latitude && data.longitude) {
+        setLocation({
+          lat: data.latitude,
+          lon: data.longitude
+        });
+      }
+    } catch (error) {
+      console.error('IP-based country detection failed:', error);
+      setCountryCode('US'); // Default to US
+      setDetectedCountry('United States');
+    }
+  };
 
   const handlePanicButton = () => {
     setIsPanicActive(true);
@@ -111,6 +461,8 @@ const Emergency: React.FC<EmergencyProps> = ({ user }) => {
     }
   };
 
+  const currentCountryData = EMERGENCY_CONTACTS_BY_COUNTRY[countryCode] || EMERGENCY_CONTACTS_BY_COUNTRY['US'];
+
   return (
     <div className="max-w-6xl mx-auto space-y-6">
       <div className="text-center mb-8">
@@ -125,13 +477,59 @@ const Emergency: React.FC<EmergencyProps> = ({ user }) => {
         <p className="text-gray-400 text-lg">Immediate access to emergency contacts and help</p>
       </div>
 
+      {isDetectingCountry && (
+        <div className="glass-card p-6 border border-cyan-500/30 bg-gradient-to-br from-cyan-500/10 to-blue-500/10">
+          <div className="flex items-center gap-3">
+            <span className="text-3xl animate-spin">🌍</span>
+            <div>
+              <h3 className="font-bold text-cyan-400 mb-1">Detecting Your Location...</h3>
+              <p className="text-gray-300 text-sm">Finding emergency services in your area</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {!isDetectingCountry && (
+        <div className="glass-card p-6 border-2 border-emerald-500/40">
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <div className="flex items-center gap-3">
+              <span className="text-5xl">{currentCountryData.flag}</span>
+              <div>
+                <h3 className="text-xl font-bold text-white">
+                  Emergency Services in {currentCountryData.country}
+                </h3>
+                <p className="text-gray-400 text-sm">
+                  {detectedCountry ? `Detected: ${detectedCountry}` : 'Location detected'}
+                </p>
+              </div>
+            </div>
+            <select
+              value={countryCode}
+              onChange={(e) => setCountryCode(e.target.value)}
+              className="px-4 py-2 rounded-lg bg-white/10 border border-emerald-500/30 text-white hover:bg-white/20 transition-all duration-300 cursor-pointer"
+            >
+              <option value="US">🇺🇸 United States</option>
+              <option value="GB">🇬🇧 United Kingdom</option>
+              <option value="IN">🇮🇳 India</option>
+              <option value="AU">🇦🇺 Australia</option>
+              <option value="CA">🇨🇦 Canada</option>
+              <option value="DE">🇩🇪 Germany</option>
+              <option value="FR">🇫🇷 France</option>
+              <option value="JP">🇯🇵 Japan</option>
+              <option value="CN">🇨🇳 China</option>
+              <option value="BR">🇧🇷 Brazil</option>
+            </select>
+          </div>
+        </div>
+      )}
+
       <div className="glass-card p-8 border-2 border-red-500/40 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-pink-500/5 animate-pulse"></div>
         <div className="relative z-10">
           <div className="text-center mb-6">
             <div className="text-6xl mb-4 animate-bounce">🆘</div>
             <h2 className="text-2xl font-bold text-red-400 mb-2">PANIC BUTTON</h2>
-            <p className="text-gray-300 mb-6">Click to call 911 immediately</p>
+            <p className="text-gray-300 mb-6">Click to call {currentCountryData.panicNumber} immediately</p>
           </div>
           <button
             onMouseDown={handlePanicButton}
@@ -142,18 +540,18 @@ const Emergency: React.FC<EmergencyProps> = ({ user }) => {
                 : 'bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 hover:scale-105'
             } text-white shadow-lg hover:shadow-2xl hover:shadow-red-500/30`}
             onClick={() => {
-              if (window.confirm('⚠️ EMERGENCY ALERT\n\nAre you sure you want to call 911?')) {
-                makeCall('911');
+              if (window.confirm(`⚠️ EMERGENCY ALERT\n\nAre you sure you want to call ${currentCountryData.panicNumber}?`)) {
+                makeCall(currentCountryData.panicNumber);
               }
             }}
           >
-            {isPanicActive ? '🚨 CALLING 911...' : '🆘 EMERGENCY - CALL 911'}
+            {isPanicActive ? `🚨 CALLING ${currentCountryData.panicNumber}...` : `🆘 EMERGENCY - CALL ${currentCountryData.panicNumber}`}
           </button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {emergencyContacts.map((contact, index) => (
+        {currentCountryData.contacts.map((contact, index) => (
           <div
             key={index}
             className={`glass-card p-6 border-2 bg-gradient-to-br ${getTypeColor(contact.type)} hover:scale-105 transition-all duration-300 cursor-pointer group`}
@@ -219,11 +617,8 @@ const Emergency: React.FC<EmergencyProps> = ({ user }) => {
           <div className="flex items-center gap-3">
             <span className="text-3xl">⚠️</span>
             <div>
-              <h3 className="font-bold text-yellow-400 mb-1">Location Access Required</h3>
+              <h3 className="font-bold text-yellow-400 mb-1">Location Info</h3>
               <p className="text-gray-300 text-sm">{locationError}</p>
-              <p className="text-gray-400 text-sm mt-2">
-                Enable location services to find nearby emergency services automatically.
-              </p>
             </div>
           </div>
         </div>
