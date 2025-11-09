@@ -5,6 +5,7 @@ import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import connectPgSimple from 'connect-pg-simple';
+import bcrypt from 'bcrypt';
 import { db } from './storage';
 import { users } from '../shared/schema';
 import { eq } from 'drizzle-orm';
@@ -140,6 +141,104 @@ app.get('/auth/google/callback',
     res.redirect(`${FRONTEND_URL}?auth=success`);
   }
 );
+
+// Email/Password Authentication Endpoints
+app.post('/auth/signup', async (req, res) => {
+  try {
+    const { email, password, name } = req.body;
+
+    if (!email || !password || !name) {
+      return res.status(400).json({ error: 'Email, password, and name are required' });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({ error: 'Password must be at least 6 characters' });
+    }
+
+    // Check if user already exists
+    const existingUser = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, email.toLowerCase()))
+      .limit(1);
+
+    if (existingUser.length > 0) {
+      return res.status(409).json({ error: 'Email already registered' });
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create new user
+    const newUser = await db
+      .insert(users)
+      .values({
+        email: email.toLowerCase(),
+        name,
+        password: hashedPassword,
+        languageCode: 'en-US',
+        voiceName: null
+      })
+      .returning();
+
+    // Log user in
+    req.login(newUser[0], (err) => {
+      if (err) {
+        return res.status(500).json({ error: 'Failed to log in after signup' });
+      }
+      res.json({ user: newUser[0], message: 'Account created successfully' });
+    });
+  } catch (error) {
+    console.error('Signup error:', error);
+    res.status(500).json({ error: 'Failed to create account' });
+  }
+});
+
+app.post('/auth/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Email and password are required' });
+    }
+
+    // Find user by email
+    const existingUser = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, email.toLowerCase()))
+      .limit(1);
+
+    if (existingUser.length === 0) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    const user = existingUser[0];
+
+    // Check if user has a password (not a Google OAuth user)
+    if (!user.password) {
+      return res.status(401).json({ error: 'This email is linked to Google Sign-In. Please use "Continue with Google"' });
+    }
+
+    // Verify password
+    const isValidPassword = await bcrypt.compare(password, user.password);
+
+    if (!isValidPassword) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    // Log user in
+    req.login(user, (err) => {
+      if (err) {
+        return res.status(500).json({ error: 'Failed to log in' });
+      }
+      res.json({ user, message: 'Logged in successfully' });
+    });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ error: 'Failed to log in' });
+  }
+});
 
 app.get('/api/auth/user', (req, res) => {
   if (req.isAuthenticated()) {
